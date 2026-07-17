@@ -3,21 +3,21 @@
 | Priorité | Exigence CDC | Interface | Backend | État |
 | --- | --- | --- | --- | --- |
 | P1 | FAQ 200+ et RAG | Assistant, Assistance | `POST /api/chat` → Chatbase v2 | Branchable |
-| P1 | Diagnostic solde/PIN/SIM | Assistant, Assistance | Actions Chatbase autorisées | Socle prêt |
-| P1 | Escalade humaine avec résumé | Assistance, suivi ticket | `POST /api/tickets` | Branchable |
-| P1 | Réclamations avec ticket | Formulaire et chronologie | Adaptateur ticketing | Branchable |
-| P1 | Envoi d’argent | Bénéficiaire → montant → confirmation → reçu | API transactions | Branchable |
-| P1 | Achat airtime/factures | Menu Paiements | Adaptateur Moov Money | Socle prêt |
-| P1 | Solde et historique | Dashboard, Assistant | GET balance/transactions | Branchable |
-| P1 | PIN ou biométrie | Confirmation forte | Jeton opaque éphémère | Branchable |
-| P2 | Inscription guidée | Authentification | OTP de démonstration | Socle prêt |
-| P2 | KYC + OCR + suivi | Workflow KYC 4 étapes | `POST /api/kyc` | Branchable |
-| P2 | Budget et épargne | Dashboard, Profil, Assistant | Données Moov requises | UI prête |
-| P2 | Alertes inhabituelles | Sécurité, Notifications | Webhooks à connecter | UI prête |
-| P3 | Promotions personnalisées | Offres | CRM à connecter | UI prête |
-| Transverse | Quick replies, voix, cartes | Assistant | Chatbase Client Actions | Socle prêt |
+| P1 | Diagnostic solde/PIN/SIM | Diagnostic interactif | `POST /api/diagnostics` + adaptateur Moov | Implémenté |
+| P1 | Escalade humaine avec résumé | Assistance, suivi ticket | Ticket interne + adaptateur externe | Implémenté |
+| P1 | Réclamations avec ticket | Formulaire et chronologie | `GET|POST /api/tickets` | Implémenté |
+| P1 | Envoi d’argent | Bénéficiaire → montant → biométrie → reçu | Idempotence + contexte signé | Implémenté |
+| P1 | Achat airtime/factures | Workflows complets | Adaptateurs Airtime et factures | Implémenté |
+| P1 | Solde et historique | Dashboard, Assistant | Routes authentifiées | Implémenté |
+| P1 | PIN ou biométrie | Passkey de l’appareil | WebAuthn avec vérification utilisateur obligatoire | Implémenté |
+| P2 | Inscription guidée | Téléphone, OTP, passkey | OTP HMAC + sessions Web/mobile | Implémenté |
+| P2 | KYC + OCR + suivi | Workflow KYC 4 étapes | OCR réel + S3 privé + PostgreSQL | Implémenté |
+| P2 | Budget et épargne | Dashboard, Profil, Assistant | `GET /api/financial-insights` sur opérations réelles | Implémenté |
+| P2 | Alertes inhabituelles | Sécurité, Notifications | Webhook HMAC + persistance | Implémenté |
+| P3 | Promotions personnalisées | Offres dynamiques | `GET /api/offers` + adaptateur CRM | Implémenté |
+| Transverse | Quick replies, voix, cartes | Assistant | Chatbase + dictée navigateur | Implémenté |
 | Transverse | FR/Fang/Myene/EN | Assistant | Corpus/configuration Chatbase | À configurer |
-| Pilotage | 6 KPIs contractuels | Administration | Analytics à connecter | UI prête |
+| Pilotage | KPIs opérationnels | Administration | `GET /api/admin/metrics` protégé | Implémenté |
 | NLU | Précision/rappel/F1 | Administration | Export Chatbase | À connecter |
 
 ## Cibles affichées au pilotage
@@ -26,4 +26,6 @@
 - disponibilité 99,9 % ; 5 000 sessions simultanées ; CSAT > 80 % ;
 - 5 000 transactions/mois à M+6 ; 20 000 MAU en année 1.
 
-Les codes PIN et données biométriques ne sont jamais stockés. Le front échange uniquement un jeton de confirmation éphémère fourni par Moov Money.
+Les codes PIN et données biométriques ne sont jamais stockés. L’empreinte/Face ID reste sur l’appareil ; le serveur vérifie une assertion WebAuthn et émet une confirmation éphémère liée à l’opération exacte.
+
+« Implémenté » signifie que l’interface, la validation, la persistance et l’adaptateur sont codés. « Branchable » ou « à connecter » signifie qu’un contrat ou des identifiants externes restent à fournir par Moov Money/Chatbase ou le prestataire concerné.

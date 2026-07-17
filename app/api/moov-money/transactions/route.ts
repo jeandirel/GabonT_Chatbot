@@ -1,13 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getTransactions, initiateTransfer } from "../../../../lib/server/moov-money";
+import { verifyConfirmationToken } from "../../../../lib/server/session";
+import { db, hasDatabase } from "../../../../lib/server/db";
+import { authenticatedUser, authenticationStatus } from "../../../../lib/server/auth";
 
 export async function GET(request: NextRequest) {
-  return NextResponse.json(await getTransactions(request.nextUrl.searchParams.get("customerId") || "demo-user"));
+  try {
+    const user = await authenticatedUser(request, request.nextUrl.searchParams.get("customerId") || "demo-user");
+    return NextResponse.json(await getTransactions(user.phone));
+  } catch (error) { return NextResponse.json({ error: error instanceof Error ? error.message : "Accès refusé" }, { status: authenticationStatus(error) }); }
 }
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
   if (!body.recipient || !Number.isFinite(Number(body.amount)) || Number(body.amount) <= 0) return NextResponse.json({ error: "Bénéficiaire ou montant invalide" }, { status: 400 });
-  const result = await initiateTransfer(body.customerId || "demo-user", { recipient: body.recipient, amount: Number(body.amount), channel: "chat", confirmationToken: body.confirmationToken || "demo-confirmation", idempotencyKey: request.headers.get("Idempotency-Key") || crypto.randomUUID() });
+  if (!body.confirmationToken && process.env.NODE_ENV === "production") return NextResponse.json({ error: "Confirmation biométrique obligatoire" }, { status: 401 });
+  const confirmation = body.confirmationToken ? await verifyConfirmationToken(body.confirmationToken) : undefined;
+  if (confirmation?.context && (confirmation.context.type !== "transfer" || confirmation.context.recipient !== body.recipient || Number(confirmation.context.amount) !== Number(body.amount))) return NextResponse.json({ error: "La transaction ne correspond pas à la confirmation biométrique" }, { status: 400 });
+  const user = confirmation && hasDatabase() ? await db().user.findUnique({ where: { id: confirmation.userId } }) : undefined;
+  const customerId = user?.phone || (process.env.NODE_ENV !== "production" ? body.customerId || "demo-user" : "");
+  if (!customerId) return NextResponse.json({ error: "Session client invalide" }, { status: 401 });
+  const result = await initiateTransfer(customerId, { recipient: body.recipient, amount: Number(body.amount), channel: "chat", confirmationToken: body.confirmationToken || "development-only", idempotencyKey: request.headers.get("Idempotency-Key") || crypto.randomUUID() });
   return NextResponse.json(result, { status: 201 });
 }

@@ -1,0 +1,43 @@
+CREATE TYPE "ChallengeType" AS ENUM ('REGISTRATION', 'AUTHENTICATION');
+CREATE TYPE "KycStatus" AS ENUM ('DRAFT', 'OCR_COMPLETE', 'PENDING_REVIEW', 'APPROVED', 'REJECTED', 'ACTION_REQUIRED');
+CREATE TYPE "TicketStatus" AS ENUM ('OPEN', 'IN_PROGRESS', 'WAITING_CUSTOMER', 'RESOLVED', 'CLOSED');
+CREATE TYPE "TransactionStatus" AS ENUM ('PENDING', 'REQUIRES_CONFIRMATION', 'PROCESSING', 'COMPLETED', 'FAILED', 'CANCELLED');
+CREATE TYPE "TransactionType" AS ENUM ('TRANSFER', 'AIRTIME', 'BILL_PAYMENT');
+
+CREATE TABLE "User" ("id" TEXT NOT NULL, "phone" TEXT NOT NULL, "displayName" TEXT, "locale" TEXT NOT NULL DEFAULT 'fr', "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP, "updatedAt" TIMESTAMP(3) NOT NULL, CONSTRAINT "User_pkey" PRIMARY KEY ("id"));
+CREATE TABLE "WebAuthnCredential" ("id" TEXT NOT NULL, "credentialId" TEXT NOT NULL, "publicKey" BYTEA NOT NULL, "counter" BIGINT NOT NULL DEFAULT 0, "transports" TEXT[], "deviceType" TEXT NOT NULL, "backedUp" BOOLEAN NOT NULL, "webauthnUserId" TEXT NOT NULL, "userId" TEXT NOT NULL, "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP, "lastUsedAt" TIMESTAMP(3), CONSTRAINT "WebAuthnCredential_pkey" PRIMARY KEY ("id"));
+CREATE TABLE "RefreshToken" ("id" TEXT NOT NULL, "tokenHash" TEXT NOT NULL, "userId" TEXT NOT NULL, "expiresAt" TIMESTAMP(3) NOT NULL, "revokedAt" TIMESTAMP(3), "lastUsedAt" TIMESTAMP(3), "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP, CONSTRAINT "RefreshToken_pkey" PRIMARY KEY ("id"));
+CREATE TABLE "PendingUpload" ("id" TEXT NOT NULL, "kind" TEXT NOT NULL, "fileName" TEXT NOT NULL, "mimeType" TEXT NOT NULL, "sha256" TEXT NOT NULL, "storageKey" TEXT, "userId" TEXT NOT NULL, "consumedAt" TIMESTAMP(3), "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP, CONSTRAINT "PendingUpload_pkey" PRIMARY KEY ("id"));
+CREATE TABLE "WebAuthnChallenge" ("id" TEXT NOT NULL, "challenge" TEXT NOT NULL, "context" JSONB, "type" "ChallengeType" NOT NULL, "userId" TEXT NOT NULL, "expiresAt" TIMESTAMP(3) NOT NULL, "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP, CONSTRAINT "WebAuthnChallenge_pkey" PRIMARY KEY ("id"));
+CREATE TABLE "OtpChallenge" ("id" TEXT NOT NULL, "phone" TEXT NOT NULL, "codeHash" TEXT NOT NULL, "attempts" INTEGER NOT NULL DEFAULT 0, "expiresAt" TIMESTAMP(3) NOT NULL, "verifiedAt" TIMESTAMP(3), "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP, CONSTRAINT "OtpChallenge_pkey" PRIMARY KEY ("id"));
+CREATE TABLE "KycApplication" ("id" TEXT NOT NULL, "reference" TEXT NOT NULL, "status" "KycStatus" NOT NULL DEFAULT 'DRAFT', "documentType" TEXT NOT NULL, "extractedData" JSONB, "confidence" DOUBLE PRECISION, "userId" TEXT NOT NULL, "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP, "updatedAt" TIMESTAMP(3) NOT NULL, CONSTRAINT "KycApplication_pkey" PRIMARY KEY ("id"));
+CREATE TABLE "KycDocument" ("id" TEXT NOT NULL, "kind" TEXT NOT NULL, "fileName" TEXT NOT NULL, "mimeType" TEXT NOT NULL, "sha256" TEXT NOT NULL, "storageKey" TEXT, "ocrText" TEXT, "applicationId" TEXT NOT NULL, "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP, CONSTRAINT "KycDocument_pkey" PRIMARY KEY ("id"));
+CREATE TABLE "Ticket" ("id" TEXT NOT NULL, "reference" TEXT NOT NULL, "category" TEXT NOT NULL, "description" TEXT NOT NULL, "summary" TEXT, "status" "TicketStatus" NOT NULL DEFAULT 'OPEN', "externalId" TEXT, "conversationId" TEXT, "userId" TEXT NOT NULL, "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP, "updatedAt" TIMESTAMP(3) NOT NULL, CONSTRAINT "Ticket_pkey" PRIMARY KEY ("id"));
+CREATE TABLE "Transaction" ("id" TEXT NOT NULL, "reference" TEXT NOT NULL, "type" "TransactionType" NOT NULL, "status" "TransactionStatus" NOT NULL DEFAULT 'PENDING', "amount" DECIMAL(18,2) NOT NULL, "currency" TEXT NOT NULL DEFAULT 'XAF', "recipient" TEXT, "provider" TEXT, "externalId" TEXT, "idempotencyKey" TEXT NOT NULL, "userId" TEXT NOT NULL, "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP, "updatedAt" TIMESTAMP(3) NOT NULL, CONSTRAINT "Transaction_pkey" PRIMARY KEY ("id"));
+CREATE TABLE "Notification" ("id" TEXT NOT NULL, "type" TEXT NOT NULL, "title" TEXT NOT NULL, "body" TEXT NOT NULL, "readAt" TIMESTAMP(3), "userId" TEXT NOT NULL, "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP, CONSTRAINT "Notification_pkey" PRIMARY KEY ("id"));
+CREATE TABLE "AuditEvent" ("id" TEXT NOT NULL, "action" TEXT NOT NULL, "resource" TEXT NOT NULL, "resourceId" TEXT, "outcome" TEXT NOT NULL, "metadata" JSONB, "previousHash" TEXT, "hash" TEXT NOT NULL, "userId" TEXT, "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP, CONSTRAINT "AuditEvent_pkey" PRIMARY KEY ("id"));
+
+CREATE UNIQUE INDEX "User_phone_key" ON "User"("phone");
+CREATE UNIQUE INDEX "WebAuthnCredential_credentialId_key" ON "WebAuthnCredential"("credentialId");
+CREATE UNIQUE INDEX "RefreshToken_tokenHash_key" ON "RefreshToken"("tokenHash");
+CREATE INDEX "RefreshToken_userId_expiresAt_idx" ON "RefreshToken"("userId", "expiresAt");
+CREATE INDEX "PendingUpload_userId_kind_createdAt_idx" ON "PendingUpload"("userId", "kind", "createdAt");
+CREATE INDEX "WebAuthnChallenge_userId_type_expiresAt_idx" ON "WebAuthnChallenge"("userId", "type", "expiresAt");
+CREATE INDEX "OtpChallenge_phone_expiresAt_idx" ON "OtpChallenge"("phone", "expiresAt");
+CREATE UNIQUE INDEX "KycApplication_reference_key" ON "KycApplication"("reference");
+CREATE UNIQUE INDEX "Ticket_reference_key" ON "Ticket"("reference");
+CREATE UNIQUE INDEX "Transaction_reference_key" ON "Transaction"("reference");
+CREATE UNIQUE INDEX "Transaction_idempotencyKey_key" ON "Transaction"("idempotencyKey");
+CREATE INDEX "Notification_userId_createdAt_idx" ON "Notification"("userId", "createdAt");
+CREATE INDEX "AuditEvent_createdAt_idx" ON "AuditEvent"("createdAt");
+
+ALTER TABLE "WebAuthnCredential" ADD CONSTRAINT "WebAuthnCredential_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "RefreshToken" ADD CONSTRAINT "RefreshToken_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "PendingUpload" ADD CONSTRAINT "PendingUpload_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "WebAuthnChallenge" ADD CONSTRAINT "WebAuthnChallenge_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "KycApplication" ADD CONSTRAINT "KycApplication_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "KycDocument" ADD CONSTRAINT "KycDocument_applicationId_fkey" FOREIGN KEY ("applicationId") REFERENCES "KycApplication"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Ticket" ADD CONSTRAINT "Ticket_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Notification" ADD CONSTRAINT "Notification_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "AuditEvent" ADD CONSTRAINT "AuditEvent_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;

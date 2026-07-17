@@ -1,0 +1,254 @@
+openapi: 3.1.0
+info:
+  title: Moov Assist Web & Mobile API
+  version: 0.3.0
+  description: API façade sécurisée pour Chatbase, Moov Money, KYC et assistance.
+servers:
+  - url: https://assist.example.ga
+security:
+  - bearerAuth: []
+paths:
+  /api/auth/otp:
+    post:
+      security: []
+      summary: Envoyer ou vérifier un OTP
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [phone]
+              properties:
+                phone: { type: string, pattern: '^0[1-7][0-9]{7}$' }
+                code: { type: string, pattern: '^[0-9]{6}$' }
+      responses:
+        '201': { description: OTP envoyé }
+        '200': { description: OTP vérifié, jetons Web/mobile émis }
+        '429': { $ref: '#/components/responses/RateLimited' }
+  /api/auth/refresh:
+    post:
+      security: []
+      summary: Renouveler et faire tourner les jetons
+      responses:
+        '200': { description: Nouvelle paire de jetons }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /api/auth/logout:
+    post:
+      summary: Révoquer le jeton de renouvellement
+      responses:
+        '200': { description: Session terminée }
+  /api/chat:
+    post:
+      security: []
+      summary: Converser avec l’agent Chatbase
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [message]
+              properties:
+                message: { type: string, maxLength: 4000 }
+                conversationId: { type: string }
+      responses:
+        '200': { description: Réponse et conversationId }
+  /api/diagnostics:
+    post:
+      summary: Lancer un diagnostic de compte
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [kind]
+              properties:
+                kind: { type: string, enum: [PIN_LOCKED, SIM_ISSUE, TRANSFER_PENDING, BALANCE_MISMATCH] }
+                reference: { type: string }
+      responses:
+        '200': { description: Contrôles et recommandation }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /api/moov-money/balance:
+    get:
+      summary: Consulter le solde du titulaire authentifié
+      responses:
+        '200': { description: Solde XAF }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /api/moov-money/transactions:
+    get:
+      summary: Historique du titulaire authentifié
+      responses:
+        '200': { description: Liste des opérations }
+    post:
+      summary: Envoyer de l’argent après confirmation forte
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        $ref: '#/components/requestBodies/Transfer'
+      responses:
+        '201': { description: Transfert accepté }
+        '400': { description: Données ou preuve non concordantes }
+  /api/moov-money/airtime:
+    post:
+      summary: Acheter du crédit après confirmation forte
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        $ref: '#/components/requestBodies/Transfer'
+      responses:
+        '201': { description: Recharge acceptée }
+  /api/moov-money/bills:
+    post:
+      summary: Payer une facture après confirmation forte
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [provider, reference, amount, confirmationToken]
+              properties:
+                provider: { type: string }
+                reference: { type: string }
+                amount: { type: number, exclusiveMinimum: 0 }
+                confirmationToken: { type: string }
+      responses:
+        '201': { description: Paiement accepté }
+  /api/ocr:
+    post:
+      summary: Extraire et stocker une pièce d’identité
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [document]
+              properties:
+                document: { type: string, format: binary }
+      responses:
+        '200': { description: Texte, champs, confiance, SHA-256 et clé S3 }
+        '413': { description: Document supérieur à 10 Mo }
+  /api/uploads:
+    post:
+      summary: Stocker un justificatif KYC privé
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [document]
+              properties:
+                document: { type: string, format: binary }
+      responses:
+        '201': { description: Hachage et clé de stockage }
+  /api/kyc:
+    post:
+      summary: Soumettre le dossier KYC
+      responses:
+        '202': { description: Dossier en revue }
+  /api/tickets:
+    get:
+      summary: Lister les réclamations du titulaire
+      responses:
+        '200': { description: Tickets récents }
+    post:
+      summary: Créer une réclamation
+      responses:
+        '201': { description: Ticket créé }
+  /api/notifications:
+    get:
+      summary: Lister les notifications
+      responses:
+        '200': { description: Notifications récentes }
+    patch:
+      summary: Marquer toutes les notifications comme lues
+      responses:
+        '200': { description: Nombre mis à jour }
+  /api/profile:
+    get:
+      summary: Lire le profil authentifié
+      responses:
+        '200': { description: Profil et langue }
+    patch:
+      summary: Modifier le nom ou la langue
+      responses:
+        '200': { description: Profil mis à jour }
+  /api/security/devices:
+    get:
+      summary: Lister les passkeys du compte
+      responses:
+        '200': { description: Appareils WebAuthn }
+    delete:
+      summary: Révoquer une passkey sans supprimer la dernière
+      responses:
+        '200': { description: Passkey révoquée }
+        '409': { description: Dernière passkey protégée }
+  /api/financial-insights:
+    get:
+      summary: Calculer les dépenses et l’épargne possible sur 30 jours
+      responses:
+        '200': { description: Agrégats financiers }
+  /api/offers:
+    get:
+      summary: Lister les offres CRM du titulaire
+      responses:
+        '200': { description: Offres personnalisées }
+  /api/admin/metrics:
+    get:
+      security: []
+      summary: Lire les métriques opérationnelles
+      parameters:
+        - name: x-admin-api-key
+          in: header
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Volumes consolidés }
+        '401': { description: Clé administrateur invalide }
+  /api/webhooks/moov-money:
+    post:
+      security: []
+      summary: Recevoir un événement Moov Money signé
+      parameters:
+        - name: x-moov-signature
+          in: header
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Événement traité ou déjà reçu }
+        '401': { description: Signature HMAC invalide }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema: { type: string, format: uuid }
+  requestBodies:
+    Transfer:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [recipient, amount, confirmationToken]
+            properties:
+              recipient: { type: string }
+              amount: { type: number, exclusiveMinimum: 0 }
+              confirmationToken: { type: string }
+  responses:
+    Unauthorized:
+      description: Session absente, expirée ou invalide
+    RateLimited:
+      description: Trop de requêtes

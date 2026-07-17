@@ -1,0 +1,218 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ChallengeType {
+  REGISTRATION
+  AUTHENTICATION
+}
+
+enum KycStatus {
+  DRAFT
+  OCR_COMPLETE
+  PENDING_REVIEW
+  APPROVED
+  REJECTED
+  ACTION_REQUIRED
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  WAITING_CUSTOMER
+  RESOLVED
+  CLOSED
+}
+
+enum TransactionStatus {
+  PENDING
+  REQUIRES_CONFIRMATION
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum TransactionType {
+  TRANSFER
+  AIRTIME
+  BILL_PAYMENT
+}
+
+model User {
+  id              String               @id @default(cuid())
+  phone           String               @unique
+  displayName     String?
+  locale          String               @default("fr")
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+  credentials     WebAuthnCredential[]
+  refreshTokens   RefreshToken[]
+  pendingUploads  PendingUpload[]
+  challenges      WebAuthnChallenge[]
+  kycApplications KycApplication[]
+  tickets         Ticket[]
+  transactions    Transaction[]
+  notifications   Notification[]
+  auditEvents     AuditEvent[]
+}
+
+model PendingUpload {
+  id         String    @id @default(cuid())
+  kind       String
+  fileName   String
+  mimeType   String
+  sha256     String
+  storageKey String?
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  consumedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([userId, kind, createdAt])
+}
+
+model RefreshToken {
+  id         String    @id @default(cuid())
+  tokenHash  String    @unique
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt  DateTime
+  revokedAt  DateTime?
+  lastUsedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([userId, expiresAt])
+}
+
+model WebAuthnCredential {
+  id             String    @id @default(cuid())
+  credentialId   String    @unique
+  publicKey      Bytes
+  counter        BigInt    @default(0)
+  transports     String[]
+  deviceType     String
+  backedUp       Boolean
+  webauthnUserId String
+  userId         String
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt      DateTime  @default(now())
+  lastUsedAt     DateTime?
+}
+
+model WebAuthnChallenge {
+  id        String        @id @default(cuid())
+  challenge String
+  context   Json?
+  type      ChallengeType
+  userId    String
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime      @default(now())
+
+  @@index([userId, type, expiresAt])
+}
+
+model OtpChallenge {
+  id         String    @id @default(cuid())
+  phone      String
+  codeHash   String
+  attempts   Int       @default(0)
+  expiresAt  DateTime
+  verifiedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([phone, expiresAt])
+}
+
+model KycApplication {
+  id            String        @id @default(cuid())
+  reference     String        @unique
+  status        KycStatus     @default(DRAFT)
+  documentType  String
+  extractedData Json?
+  confidence    Float?
+  userId        String
+  user          User          @relation(fields: [userId], references: [id])
+  documents     KycDocument[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model KycDocument {
+  id            String         @id @default(cuid())
+  kind          String
+  fileName      String
+  mimeType      String
+  sha256        String
+  storageKey    String?
+  ocrText       String?        @db.Text
+  applicationId String
+  application   KycApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  createdAt     DateTime       @default(now())
+}
+
+model Ticket {
+  id             String       @id @default(cuid())
+  reference      String       @unique
+  category       String
+  description    String       @db.Text
+  summary        String?      @db.Text
+  status         TicketStatus @default(OPEN)
+  externalId     String?
+  conversationId String?
+  userId         String
+  user           User         @relation(fields: [userId], references: [id])
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+model Transaction {
+  id             String            @id @default(cuid())
+  reference      String            @unique
+  type           TransactionType
+  status         TransactionStatus @default(PENDING)
+  amount         Decimal           @db.Decimal(18, 2)
+  currency       String            @default("XAF")
+  recipient      String?
+  provider       String?
+  externalId     String?
+  idempotencyKey String            @unique
+  userId         String
+  user           User              @relation(fields: [userId], references: [id])
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+}
+
+model Notification {
+  id        String    @id @default(cuid())
+  type      String
+  title     String
+  body      String    @db.Text
+  readAt    DateTime?
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+
+  @@index([userId, createdAt])
+}
+
+model AuditEvent {
+  id           String   @id @default(cuid())
+  action       String
+  resource     String
+  resourceId   String?
+  outcome      String
+  metadata     Json?
+  previousHash String?
+  hash         String
+  userId       String?
+  user         User?    @relation(fields: [userId], references: [id])
+  createdAt    DateTime @default(now())
+
+  @@index([createdAt])
+}
