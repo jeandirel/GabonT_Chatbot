@@ -64,6 +64,42 @@ export function NotificationsCenter({ notify }: { notify: Notify }) {
   return <div className="workflow"><div className="page-heading"><div><p className="eyebrow">CENTRE DE NOTIFICATIONS</p><h2>Restez informé en temps réel.</h2></div><button className="secondary" onClick={() => notify("Toutes les notifications sont marquées comme lues.")}><Check/> Tout marquer comme lu</button></div><div className="filterbar">{["Toutes","Transactions","Sécurité","Support","Promotions"].map(x => <button key={x} className={filter === x ? "active" : ""} onClick={() => setFilter(x)}>{x}</button>)}</div><section className="glass notification-list">{items.filter(x => filter === "Toutes" || x.type === filter).map((item,index) => <button key={item.title} className={item.unread ? "unread" : ""}><span className="notification-icon"><item.icon/></span><div><b>{item.title}</b><p>{item.text}</p><small>{item.time}</small></div><ChevronRight/>{item.unread && <i/>}</button>)}</section></div>;
 }
 
+export function KycWorkflow({ notify }: { notify: Notify }) {
+  const [step, setStep] = useState(0);
+  const [documentType, setDocumentType] = useState("CNI");
+  const [identityFile, setIdentityFile] = useState<File>();
+  const [addressFile, setAddressFile] = useState<File>();
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<{ status: string; reference: string }>();
+  const analyze = async () => {
+    if (!identityFile) return notify("Ajoutez une pièce d’identité.");
+    setLoading(true);
+    await new Promise(resolve => setTimeout(resolve, 900));
+    setLoading(false); setStep(2);
+  };
+  const submit = async () => {
+    if (!addressFile) return notify("Ajoutez un justificatif de domicile.");
+    setLoading(true);
+    const response = await fetch("/api/kyc", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ documentType, identityFileName: identityFile?.name, addressFileName: addressFile.name }) });
+    const payload = await response.json(); setLoading(false); setResult(payload); setStep(3);
+  };
+  return <div className="workflow narrow"><Steps current={step} labels={["Identité","Analyse OCR","Domicile","Suivi"]}/><section className="glass form-card">
+    {step === 0 && <><span className="form-icon"><UserCheck/></span><h2>Vérifiez votre identité</h2><p>Les documents sont utilisés uniquement pour l’ouverture et la conformité du compte.</p><Field label="Type de pièce"><select value={documentType} onChange={e => setDocumentType(e.target.value)}><option>CNI</option><option>Passeport</option></select></Field><Field label="Photo du document"><label className="file-drop"><Upload/><b>{identityFile?.name || "Choisir un document"}</b><small>JPG, PNG ou PDF · 10 Mo maximum</small><input type="file" accept="image/jpeg,image/png,application/pdf" onChange={e => setIdentityFile(e.target.files?.[0])}/></label></Field><button className="primary full" disabled={!identityFile} onClick={() => setStep(1)}>Analyser le document <ChevronRight/></button></>}
+    {step === 1 && <div className="ocr"><span className="scan-frame"><ScanLine/></span><h2>Contrôle OCR sécurisé</h2><p>Nous vérifions la lisibilité, le type de pièce et la cohérence des informations.</p><div className="check-list"><span><Check/> Document lisible</span><span><Check/> Informations extraites</span><span><Check/> Contrôle de cohérence</span></div><button className="primary full" onClick={analyze} disabled={loading}>{loading ? "Analyse en cours…" : "Confirmer les informations"}</button></div>}
+    {step === 2 && <><span className="form-icon"><FileText/></span><h2>Justificatif de domicile</h2><p>Ajoutez un document récent correspondant à l’adresse déclarée.</p><Field label="Justificatif"><label className="file-drop"><Upload/><b>{addressFile?.name || "Choisir le justificatif"}</b><small>Facture ou attestation de moins de 3 mois</small><input type="file" accept="image/jpeg,image/png,application/pdf" onChange={e => setAddressFile(e.target.files?.[0])}/></label></Field><button className="primary full" disabled={!addressFile || loading} onClick={submit}>{loading ? "Envoi sécurisé…" : "Soumettre le dossier"}</button></>}
+    {step === 3 && <div className="receipt"><span className="success"><Clock3/></span><p className="eyebrow">DOSSIER {result?.reference}</p><h2>Vérification en cours</h2><p>Votre dossier est complet. Vous recevrez une notification à chaque changement de statut.</p><div className="timeline compact"><div className="complete"><i><Check/></i><div><b>Documents reçus</b><small>Terminé</small></div></div><div className="complete"><i><Check/></i><div><b>Analyse automatique</b><small>Terminé</small></div></div><div><i><Clock3/></i><div><b>Validation conformité</b><small>Délai estimé : 24 heures</small></div></div></div></div>}
+  </section></div>;
+}
+
+export function PersonalizedOffers({ notify }: { notify: Notify }) {
+  const offers = [
+    { label:"Bonus airtime", title:"20 % de crédit offert", text:"Sur votre prochaine recharge de 5 000 FCFA ou plus.", color:"green" },
+    { label:"Épargne", title:"Objectif rentrée scolaire", text:"Mettez automatiquement 10 000 FCFA de côté chaque semaine.", color:"gold" },
+    { label:"Canal+", title:"Paiement sans frais", text:"Réglez votre abonnement depuis Moov Assist cette semaine.", color:"blue" },
+  ];
+  return <div className="workflow"><div className="page-heading"><div><p className="eyebrow">OFFRES PERSONNALISÉES</p><h2>Des avantages adaptés à vos usages.</h2><p>Chaque recommandation peut être expliquée ou désactivée.</p></div></div><div className="offer-grid">{offers.map(offer => <section className={`glass offer ${offer.color}`} key={offer.title}><span>{offer.label}</span><h3>{offer.title}</h3><p>{offer.text}</p><button onClick={() => notify(`${offer.title} sélectionnée.`)}>Découvrir <ChevronRight/></button><button className="why" onClick={() => notify("Cette offre est proposée selon vos services Moov Money utilisés, sans décision automatisée opposable.")}>Pourquoi cette recommandation ?</button></section>)}</div></div>;
+}
+
 export function AdminDashboard() {
   const metrics = [["Résolution automatique","78 %","+6,2 %"],["Conversations","24 892","+12,4 %"],["Satisfaction CSAT","4,6/5","+0,3"],["Transferts agents","14 %","−3,1 %"],["Transactions/mois","8 427","+18,6 %"],["Utilisateurs actifs","31 204","+9,8 %"]];
   return <div className="workflow admin"><div className="page-heading"><div><p className="eyebrow">TEMPS RÉEL · MIS À JOUR À 15:42</p><h2>Performance de Moov Assist</h2></div><span className="live"><i/> Systèmes opérationnels</span></div><div className="metric-grid">{metrics.map(([label,value,trend]) => <section className="glass" key={label}><small>{label}</small><strong>{value}</strong><span className="good">{trend}</span></section>)}</div><div className="admin-grid"><section className="glass chart-card"><div className="section-title"><h3>Conversations résolues</h3><select><option>7 derniers jours</option><option>30 derniers jours</option></select></div><div className="bars">{[58,70,64,82,76,91,86].map((h,i) => <div key={i}><i style={{height:`${h}%`}}/><span>{["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"][i]}</span></div>)}</div></section><section className="glass intents"><h3>Intentions principales</h3>{[["Consultation du solde",82],["Transfert d’argent",68],["PIN / compte bloqué",51],["Paiement de facture",43],["Suivi réclamation",31]].map(([label,value]) => <div key={String(label)}><span>{label}</span><b>{value}%</b><i><em style={{width:`${value}%`}}/></i></div>)}</section></div><section className="glass alerts"><div className="section-title"><h3>Alertes et qualité</h3><span>3 éléments à surveiller</span></div>{[[AlertTriangle,"Hausse des demandes PIN bloqué","+24 % depuis 14:00","warning"],[Clock3,"Temps de réponse WhatsApp","2,8 s · objectif < 3 s","good"],[MessageSquareText,"Questions sans réponse fiable","38 conversations à examiner","warning"]].map(([Icon,title,text,state]) => <div className="row" key={String(title)}><span className={`alert-icon ${state}`}><Icon/></span><div><b>{String(title)}</b><small>{String(text)}</small></div><button>Examiner</button></div>)}</section></div>;
