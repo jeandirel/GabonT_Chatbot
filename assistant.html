@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Moov Assist | AI Intelligence</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Hanken+Grotesk:wght@600;700;800&amp;family=Geist:wght@400;500;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=Hanken+Grotesk:wght@100..900&amp;family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary": "#3c2f00",
+                    "tertiary-container": "#abb2cc",
+                    "primary-fixed": "#6bfe9c",
+                    "background": "#101415",
+                    "error": "#ffb4ab",
+                    "on-error-container": "#ffdad6",
+                    "on-secondary-fixed": "#241a00",
+                    "on-surface": "#e0e3e5",
+                    "secondary": "#e9c349",
+                    "on-tertiary": "#283044",
+                    "on-tertiary-fixed": "#131b2e",
+                    "primary": "#54e98a",
+                    "surface-container": "#1d2022",
+                    "tertiary-fixed": "#dae2fd",
+                    "on-background": "#e0e3e5",
+                    "surface-tint": "#4ae183",
+                    "surface-variant": "#323537",
+                    "on-tertiary-fixed-variant": "#3f465c",
+                    "surface-container-high": "#272a2c",
+                    "outline": "#869486",
+                    "surface-container-highest": "#323537",
+                    "surface": "#101415",
+                    "surface-container-low": "#191c1e",
+                    "secondary-container": "#af8d11",
+                    "tertiary": "#c6cee8",
+                    "on-primary-fixed-variant": "#005228",
+                    "on-secondary-fixed-variant": "#574500",
+                    "surface-bright": "#363a3b",
+                    "on-surface-variant": "#bbcbbb",
+                    "on-primary-container": "#005027",
+                    "on-tertiary-container": "#3d455a",
+                    "on-secondary-container": "#342800",
+                    "inverse-primary": "#006d37",
+                    "on-error": "#690005",
+                    "inverse-surface": "#e0e3e5",
+                    "on-primary-fixed": "#00210c",
+                    "error-container": "#93000a",
+                    "primary-container": "#2ecc71",
+                    "outline-variant": "#3d4a3e",
+                    "surface-dim": "#101415",
+                    "inverse-on-surface": "#2d3133",
+                    "secondary-fixed": "#ffe088",
+                    "on-primary": "#003919",
+                    "surface-container-lowest": "#0b0f10",
+                    "primary-fixed-dim": "#4ae183",
+                    "tertiary-fixed-dim": "#bec6e0",
+                    "secondary-fixed-dim": "#e9c349"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "stack-lg": "32px",
+                    "margin-desktop": "64px",
+                    "gutter": "24px",
+                    "stack-md": "16px",
+                    "container-max": "1440px",
+                    "unit": "8px",
+                    "stack-sm": "4px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Hanken Grotesk"],
+                    "label-md": ["Geist"],
+                    "body-md": ["Inter"],
+                    "headline-lg": ["Hanken Grotesk"],
+                    "headline-lg-mobile": ["Hanken Grotesk"],
+                    "body-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(29, 32, 34, 0.4);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .ai-shimmer {
+            background: linear-gradient(90deg, transparent, rgba(84, 233, 138, 0.1), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite linear;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .liquid-line {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: draw 2s ease-out forwards;
+        }
+        @keyframes draw {
+            to { stroke-dashoffset: 0; }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background: radial-gradient(circle at 50% 50%, #1a1f20 0%, #101415 100%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface selection:bg-primary/30 min-h-screen flex overflow-hidden">
+<!-- WebGL Background -->
+
+<!-- SideNavBar (Shared Component) -->
+<aside class="fixed left-0 top-0 h-full flex flex-col p-stack-md bg-surface/80 backdrop-blur-xl dark:bg-surface-container/80 h-screen w-64 rounded-r-xl border-r border-outline-variant/10 shadow-xl z-50">
+<div class="mb-stack-lg px-4">
+<h1 class="font-display-lg text-headline-lg bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Moov Assist</h1>
+<p class="font-label-md text-label-md text-on-surface-variant opacity-60">Aetheric Intelligence</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-all duration-300" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-body-md text-body-md">Home</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-primary-container/20 text-primary font-bold rounded-lg active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined">smart_toy</span>
+<span class="font-body-md text-body-md">Assistant</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-all duration-300" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-body-md text-body-md">Payments</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-all duration-300" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-body-md text-body-md">Transactions</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-all duration-300" href="#">
+<span class="material-symbols-outlined">insights</span>
+<span class="font-body-md text-body-md">Insights</span>
+</a>
+</nav>
+<div class="mt-auto space-y-2 border-t border-outline-variant/10 pt-4">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/30 transition-all duration-300" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+<div class="flex items-center gap-3 px-4 py-3">
+<img class="w-8 h-8 rounded-full border border-primary/20" data-alt="A professional close-up headshot of a diverse male executive with a warm smile, wearing a sleek charcoal suit against a soft-focus architectural background with cool lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAP6OFFzyREfXdd-vsZ7RH2TZCzis1yMS2r8Eq3yvT-3qAgQqUDja9RoARaW-1r8zW3RiRt4bUTUEaWrNKJiuPZWsgyLB5w8Q9zmJVQ6QS5XmJqZSx4XKFkkUR0VtYLdgFhdTtlE8Y-ShpR3OexHOeu1O5YwzEEM0hflMQH4WgQHk9slfFvIRSOUw5JBGg-hEqadp1uKnyuBnw0epPrXQsvsd5bNYMDxwll0lzd6oHkJ22EeP6j0kCsv8GWWs3btRWGKitJxrvQjAs"/>
+<div class="flex flex-col overflow-hidden">
+<span class="text-on-surface font-label-md truncate">Adrian Chen</span>
+<span class="text-on-surface-variant text-[10px]">Premium Member</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-64 flex flex-col relative h-screen">
+<!-- TopAppBar (Shared Component Overlay) -->
+<header class="flex justify-between items-center px-margin-desktop w-full sticky top-0 z-40 bg-surface/40 backdrop-blur-md dark:bg-surface-dim/40 h-16">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="font-label-md text-label-md text-primary uppercase tracking-widest">Active Session</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative group">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">notifications_active</span>
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-error rounded-full"></span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">mic</span>
+</div>
+</header>
+<!-- Chat Container -->
+<section class="flex-1 overflow-y-auto px-margin-desktop py-stack-lg space-y-stack-lg scroll-smooth pb-40" id="chat-scroller">
+<!-- Welcome Context -->
+<div class="max-w-3xl mx-auto space-y-4 text-center mb-12">
+<div class="inline-block p-4 rounded-full bg-primary/5 border border-primary/10 mb-4">
+<span class="material-symbols-outlined text-primary scale-125" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<h2 class="font-display-lg text-headline-lg text-on-surface">Good afternoon, Adrian.</h2>
+<p class="font-body-md text-on-surface-variant max-w-lg mx-auto">Your financial landscape is stable. I've processed 3 new transactions and updated your investment forecast.</p>
+</div>
+<!-- Message: Security Warning (Critical Interactive Card) -->
+<div class="flex justify-start items-start gap-4 max-w-4xl mx-auto">
+<div class="w-10 h-10 rounded-full glass-panel flex items-center justify-center shrink-0 border-error/30">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">security</span>
+</div>
+<div class="flex-1 glass-panel rounded-xl p-stack-md border-error/20 overflow-hidden relative">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-error to-transparent opacity-50"></div>
+<div class="flex justify-between items-start mb-4">
+<div>
+<h4 class="font-headline-lg-mobile text-error">Security Alert</h4>
+<p class="font-body-sm text-on-surface-variant">Suspicious login attempt detected from London, UK.</p>
+</div>
+<span class="font-label-md text-[10px] text-error px-2 py-1 bg-error/10 rounded">URGENT</span>
+</div>
+<div class="bg-surface-container-low p-4 rounded-lg mb-4 flex items-center gap-4 border border-white/5">
+<span class="material-symbols-outlined text-on-surface-variant">devices</span>
+<div class="flex-1">
+<p class="text-on-surface font-body-sm">Chrome on Linux (Ubuntu)</p>
+<p class="text-on-surface-variant text-[12px] font-label-md">IP: 185.122.204.11 • 2 minutes ago</p>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 py-3 px-4 bg-error text-on-error rounded-lg font-label-md hover:brightness-110 transition-all active:scale-[0.98]">It wasn't me</button>
+<button class="flex-1 py-3 px-4 glass-panel text-on-surface rounded-lg font-label-md hover:bg-white/5 transition-all active:scale-[0.98]">Confirm Login</button>
+</div>
+</div>
+</div>
+<!-- User Query -->
+<div class="flex justify-end items-start gap-4 max-w-4xl mx-auto">
+<div class="flex-1 glass-panel rounded-xl p-4 bg-primary/10 border-primary/20">
+<p class="font-body-md text-on-surface">Can you show me a breakdown of my spending last month and confirm that $250 transfer to John?</p>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden border border-primary/20 shrink-0">
+<img class="w-full h-full object-cover" data-alt="A professional close-up headshot of a diverse male executive with a warm smile, wearing a sleek charcoal suit against a soft-focus architectural background with cool lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoMqRxNYj9eB6FqRDLngsn0JdmisaJw2gutm606Ul7Z_zsMRUMJuE4QFZ8eMFZeunC5DP6ifbE9HB8S_EAcQkiMJ8LK1vehhaisHDV8LEKIoMdzmKFXQZmtryDlS98uv_bggDDLQaIXZPiEOy9tM2N7fOEj7g8xyPxzoOgUNN0iSYasuc4FN_mRrTSL2Kijlg5DIMpQrR9fL2Kg0BOwCU3u_hoYdZ6JevGPRa06Um6rOe2i-1q3wXzt8tmqc1GFIZJGCmQHUx5wx0"/>
+</div>
+</div>
+<!-- AI Response: Insight Chart (Liquid UI) -->
+<div class="flex justify-start items-start gap-4 max-w-4xl mx-auto">
+<div class="w-10 h-10 rounded-full glass-panel flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary">auto_awesome</span>
+</div>
+<div class="flex-1 space-y-4">
+<div class="glass-panel rounded-xl p-stack-md ai-shimmer">
+<p class="font-body-md text-on-surface mb-6">Of course. Your spending in August was 12% lower than July. Here is your category breakdown:</p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 h-48 mb-4">
+<!-- Visual Chart Mockup -->
+<div class="relative h-full flex items-end justify-between px-4 pb-2 border-b border-white/5">
+<div class="w-8 bg-primary/20 rounded-t-lg relative group h-[40%] hover:h-[45%] transition-all">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-surface p-1 rounded text-[10px] hidden group-hover:block">$1.2k</div>
+</div>
+<div class="w-8 bg-secondary/40 rounded-t-lg relative group h-[70%] hover:h-[75%] transition-all">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-surface p-1 rounded text-[10px] hidden group-hover:block">$2.1k</div>
+</div>
+<div class="w-8 bg-primary rounded-t-lg relative group h-[90%] hover:h-[95%] transition-all">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-surface p-1 rounded text-[10px] hidden group-hover:block">$3.4k</div>
+</div>
+<div class="w-8 bg-tertiary-container/30 rounded-t-lg relative group h-[30%] hover:h-[35%] transition-all">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-surface p-1 rounded text-[10px] hidden group-hover:block">$800</div>
+</div>
+</div>
+<div class="space-y-2 flex flex-col justify-center">
+<div class="flex justify-between items-center text-[12px]">
+<span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary"></span> Housing</span>
+<span class="font-label-md">$3,400</span>
+</div>
+<div class="flex justify-between items-center text-[12px]">
+<span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-secondary"></span> Entertainment</span>
+<span class="font-label-md">$2,100</span>
+</div>
+<div class="flex justify-between items-center text-[12px]">
+<span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-primary/20"></span> Groceries</span>
+<span class="font-label-md">$1,200</span>
+</div>
+</div>
+</div>
+</div>
+<!-- AI Response: Transaction Approval (Micro-Action) -->
+<div class="glass-panel rounded-xl p-stack-md border-primary/10">
+<div class="flex items-center gap-4 mb-4">
+<div class="p-3 bg-primary/10 rounded-lg">
+<span class="material-symbols-outlined text-primary">send_money</span>
+</div>
+<div>
+<h4 class="font-label-md text-on-surface">Pending Transfer</h4>
+<p class="text-on-surface-variant text-[12px]">Internal Transfer to **John Doe**</p>
+</div>
+<div class="ml-auto text-right">
+<span class="block font-label-md text-primary">$250.00</span>
+<span class="text-[10px] opacity-40">AUG 14, 2024</span>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="flex-1 py-2 px-4 bg-gradient-to-r from-primary to-primary-container text-on-primary-container rounded font-label-md hover:shadow-[0_0_15px_rgba(84,233,138,0.4)] transition-all active:scale-[0.98]">Approve Now</button>
+<button class="py-2 px-4 glass-panel text-on-surface rounded font-label-md hover:bg-white/5 transition-all">View Details</button>
+<button class="p-2 glass-panel text-error rounded hover:bg-error/10 transition-all">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- AI Response: Complaint Tracking (Timeline) -->
+<div class="flex justify-start items-start gap-4 max-w-4xl mx-auto">
+<div class="w-10 h-10 rounded-full glass-panel flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary">support_agent</span>
+</div>
+<div class="flex-1 glass-panel rounded-xl p-stack-md">
+<h4 class="font-label-md text-on-surface mb-4">Support Ticket #MOOV-9921</h4>
+<div class="space-y-6 relative">
+<!-- Vertical line -->
+<div class="absolute left-[11px] top-2 bottom-2 w-[2px] bg-white/5"></div>
+<div class="flex gap-4 relative">
+<div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center shrink-0 z-10 border-4 border-surface">
+<span class="material-symbols-outlined text-[12px] text-on-primary">check</span>
+</div>
+<div>
+<p class="text-[14px] font-label-md">Dispute Filed</p>
+<p class="text-[12px] text-on-surface-variant">Aug 12, 10:24 AM</p>
+</div>
+</div>
+<div class="flex gap-4 relative">
+<div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center shrink-0 z-10 border-4 border-surface">
+<span class="material-symbols-outlined text-[12px] text-on-primary">check</span>
+</div>
+<div>
+<p class="text-[14px] font-label-md">Evidence Verified</p>
+<p class="text-[12px] text-on-surface-variant">Aug 13, 02:45 PM</p>
+</div>
+</div>
+<div class="flex gap-4 relative">
+<div class="w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center shrink-0 z-10 border-4 border-surface animate-pulse">
+<span class="material-symbols-outlined text-[12px] text-primary">sync</span>
+</div>
+<div>
+<p class="text-[14px] font-label-md text-primary">In Final Review</p>
+<p class="text-[12px] text-on-surface-variant">Expected completion: Today, 5:00 PM</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Side: Reference Panel (Semantic Search) -->
+<aside class="fixed right-0 top-16 w-80 h-[calc(100%-4rem)] p-stack-md glass-panel border-l border-white/5 z-30 hidden xl:flex flex-col">
+<div class="flex items-center gap-2 mb-stack-lg">
+<span class="material-symbols-outlined text-primary-fixed-dim">search_insights</span>
+<h3 class="font-label-md uppercase tracking-widest text-[11px]">Knowledge Base Refs</h3>
+</div>
+<div class="space-y-4 flex-1 overflow-y-auto">
+<div class="p-3 rounded-lg bg-surface-container-high border border-white/5 hover:border-primary/20 transition-all cursor-pointer">
+<p class="font-label-md text-[13px] mb-1">Transfer Limits &amp; Policies</p>
+<p class="text-[11px] text-on-surface-variant line-clamp-2">Daily limit for non-verified internal transfers is $5,000. Verified accounts have a...</p>
+</div>
+<div class="p-3 rounded-lg bg-surface-container-high border border-white/5 hover:border-primary/20 transition-all cursor-pointer">
+<p class="font-label-md text-[13px] mb-1">Suspicious Activity Protocol</p>
+<p class="text-[11px] text-on-surface-variant line-clamp-2">How we monitor and flag unusual geographic logins and multiple failed...</p>
+</div>
+<div class="p-3 rounded-lg bg-surface-container-high border border-white/5 hover:border-primary/20 transition-all cursor-pointer">
+<p class="font-label-md text-[13px] mb-1">Merchant Category Guide</p>
+<p class="text-[11px] text-on-surface-variant line-clamp-2">Breakdown of MCC codes and how they map to our spending category visualization...</p>
+</div>
+</div>
+<div class="mt-auto p-4 rounded-xl bg-gradient-to-br from-primary/10 to-transparent border border-primary/10">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-[18px]">verified</span>
+<span class="text-[12px] font-label-md">98% Data Confidence</span>
+</div>
+<div class="w-full bg-white/5 h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[98%]"></div>
+</div>
+</div>
+</aside>
+<!-- Floating AI Dock (Shared CTA Command) -->
+<div class="absolute bottom-0 left-0 right-0 p-stack-lg z-40 bg-gradient-to-t from-background via-background/80 to-transparent">
+<div class="max-w-4xl mx-auto space-y-4">
+<!-- Smart Suggestions -->
+<div class="flex gap-2 overflow-x-auto no-scrollbar pb-2">
+<button class="px-4 py-2 rounded-full glass-panel text-[13px] whitespace-nowrap hover:bg-primary/20 hover:text-primary transition-all border-primary/10">Generate Monthly Report</button>
+<button class="px-4 py-2 rounded-full glass-panel text-[13px] whitespace-nowrap hover:bg-primary/20 hover:text-primary transition-all border-primary/10">Check PIN Status</button>
+<button class="px-4 py-2 rounded-full glass-panel text-[13px] whitespace-nowrap hover:bg-primary/20 hover:text-primary transition-all border-primary/10">Freeze Card</button>
+<button class="px-4 py-2 rounded-full glass-panel text-[13px] whitespace-nowrap hover:bg-primary/20 hover:text-primary transition-all border-primary/10">Investment Tips</button>
+</div>
+<!-- Input Dock -->
+<div class="glass-panel rounded-2xl p-2 flex items-center gap-2 shadow-2xl border-white/10 group focus-within:border-primary/30 transition-all">
+<button class="p-3 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">attach_file</span>
+</button>
+<input class="flex-1 bg-transparent border-none focus:ring-0 text-on-surface font-body-md placeholder:text-on-surface-variant/40" placeholder="Message Moov Assist..." type="text"/>
+<div class="flex items-center gap-1">
+<button class="p-3 text-on-surface-variant hover:text-secondary transition-colors">
+<span class="material-symbols-outlined">mic</span>
+</button>
+<button class="w-12 h-12 bg-primary text-on-primary rounded-xl flex items-center justify-center hover:shadow-[0_0_20px_rgba(84,233,138,0.5)] transition-all active:scale-95">
+<span class="material-symbols-outlined">arrow_upward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-4 py-2 md:hidden bg-surface-container-highest/60 backdrop-blur-2xl border-t border-primary/20 shadow-[0_-8px_40px_-12px_rgba(84,233,138,0.3)]">
+<div class="flex flex-col items-center justify-center text-on-surface-variant/60">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-md text-label-md">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-primary-fixed scale-110">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-label-md text-label-md">Assistant</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant/60">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<span class="font-label-md text-label-md">Pay</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant/60">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="font-label-md text-label-md">Insight</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant/60">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-md text-label-md">Profile</span>
+</div>
+</nav>
+<script>
+        // Micro-interactions and Auto-scroll
+        const chatScroller = document.getElementById('chat-scroller');
+        
+        // Simulating AI "typing" state
+        function setAIProcessing(isProcessing) {
+            const indicator = document.querySelector('.ai-processing-indicator');
+            if(indicator) {
+                indicator.style.opacity = isProcessing ? '1' : '0';
+            }
+        }
+
+        // Handle auto-scroll to bottom
+        const scrollToBottom = () => {
+            chatScroller.scrollTop = chatScroller.scrollHeight;
+        }
+        window.onload = scrollToBottom;
+
+        // Custom micro-animations for cards
+        document.querySelectorAll('.glass-panel').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-2px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+<script src="app.js"></script>
+</body></html>
