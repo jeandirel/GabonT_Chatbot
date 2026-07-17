@@ -1,6 +1,6 @@
 import MoovApp from "../../components/MoovApp";
 
-const screens = ["dashboard", "assistant", "payments", "support", "kyc", "security", "notifications", "profile", "auth", "admin"];
+const screens = ["dashboard", "assistant", "payments", "support", "kyc", "security", "notifications", "offers", "profile", "auth", "admin"];
 
 export function generateStaticParams() {
   return screens.map((screen) => ({ screen }));
