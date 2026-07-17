@@ -1,38 +1,22 @@
 # Moov Assist
 
-Application front-end de démonstration de l'assistant financier intelligent Moov Africa Gabon.
+Application Next.js/React/TypeScript conforme au cahier des charges `CDC-MM-BOT-2026-03`.
 
-## Stack
-
-- Next.js 16
-- React 19
-- TypeScript
-- CSS responsive personnalisé
-- Lucide React
-
-## Écrans
-
-- `/dashboard` — tableau de bord
-- `/assistant` — espace conversationnel
-- `/payments` — paiements et transferts
-- `/kyc` — vérification d'identité
-- `/security` — centre de sécurité
-- `/profile` — profil et gestion financière
-
-## Démarrage
+## Démarrer
 
 ```bash
 npm install
+cp .env.example .env.local
 npm run dev
 ```
 
-Puis ouvrir [http://localhost:3000](http://localhost:3000).
+Sans variables, les intégrations utilisent des données de démonstration. Avec `CHATBASE_API_KEY` et `CHATBASE_AGENT_ID`, l’assistant appelle l’API Chatbase v2 et exploite la documentation chargée dans l’agent.
 
-## Vérification
+## Validation
 
 ```bash
 npm run typecheck
 npm run build
 ```
 
-Les données et réponses sont simulées. Les futurs clients API seront raccordés aux domaines conversation, comptes, transactions, KYC et sécurité.
+Consultez [`docs/CDC_COVERAGE.md`](docs/CDC_COVERAGE.md) et [`docs/API_INTEGRATION.md`](docs/API_INTEGRATION.md).
