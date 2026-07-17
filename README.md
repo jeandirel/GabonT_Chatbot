@@ -1,34 +1,38 @@
-# Moov Assist — prototype front-end
+# Moov Assist
 
-Prototype navigable créé à partir des écrans Google Stitch pour valider l'expérience utilisateur avant l'intégration du moteur IA et des API métier.
+Application front-end de démonstration de l'assistant financier intelligent Moov Africa Gabon.
+
+## Stack
+
+- Next.js 16
+- React 19
+- TypeScript
+- CSS responsive personnalisé
+- Lucide React
 
 ## Écrans
 
-- Tableau de bord (`index.html`)
-- Assistant IA (`assistant.html`)
-- Paiements et transferts (`payments.html`)
-- Vérification KYC (`kyc.html`)
-- Centre de sécurité (`security.html`)
-- Profil et gestion financière (`profile.html`)
+- `/dashboard` — tableau de bord
+- `/assistant` — espace conversationnel
+- `/payments` — paiements et transferts
+- `/kyc` — vérification d'identité
+- `/security` — centre de sécurité
+- `/profile` — profil et gestion financière
 
-## Lancer le prototype
-
-Le projet est volontairement statique et sans compilation :
+## Démarrage
 
 ```bash
-python3 -m http.server 8080 --directory .
+npm install
+npm run dev
 ```
 
-Ouvrir ensuite `http://localhost:8080`.
+Puis ouvrir [http://localhost:3000](http://localhost:3000).
 
-Les actions affichent actuellement des confirmations simulées. `app.js` centralise la navigation et les interactions temporaires ; les appels au futur backend pourront y être remplacés progressivement par un client API dédié.
+## Vérification
 
-## Architecture API prévue
+```bash
+npm run typecheck
+npm run build
+```
 
-- `/api/chat` : moteur conversationnel/RAG
-- `/api/accounts` : soldes et comptes
-- `/api/transactions` : paiements et historique
-- `/api/kyc` : vérification d'identité
-- `/api/security` : sessions, appareils et alertes
-
-Le fichier `DESIGN.md` conserve les règles graphiques issues de Stitch.
+Les données et réponses sont simulées. Les futurs clients API seront raccordés aux domaines conversation, comptes, transactions, KYC et sécurité.
