@@ -1,0 +1,74 @@
+# Promotion manuelle du code entre branches : teste → preprod → prod
+# Déclenchement : Actions → Promote → Run workflow
+# Puis lancer Deploy sur l’environnement cible.
+
+name: Promote
+
+on:
+  workflow_dispatch:
+    inputs:
+      from_env:
+        description: Branche source
+        required: true
+        type: choice
+        options:
+          - teste
+          - preprod
+      to_env:
+        description: Branche destination
+        required: true
+        type: choice
+        options:
+          - preprod
+          - prod
+
+permissions:
+  contents: write
+
+concurrency:
+  group: promote-${{ github.event.inputs.to_env }}
+  cancel-in-progress: false
+
+jobs:
+  promote:
+    name: ${{ github.event.inputs.from_env }} → ${{ github.event.inputs.to_env }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate promotion path
+        env:
+          FROM: ${{ github.event.inputs.from_env }}
+          TO: ${{ github.event.inputs.to_env }}
+        run: |
+          set -euo pipefail
+          case "$FROM->$TO" in
+            teste->preprod|preprod->prod) echo "OK: $FROM → $TO" ;;
+            *)
+              echo "::error::Promotion invalide: $FROM → $TO. Chemins autorisés: teste→preprod, preprod→prod."
+              exit 1
+              ;;
+          esac
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fast-forward ${{ github.event.inputs.to_env }} to ${{ github.event.inputs.from_env }}
+        env:
+          FROM: ${{ github.event.inputs.from_env }}
+          TO: ${{ github.event.inputs.to_env }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git fetch origin "$FROM" "$TO"
+          git checkout "$TO"
+          git merge --ff-only "origin/$FROM"
+          git push origin "$TO"
+
+          echo "### Promotion" >> "$GITHUB_STEP_SUMMARY"
+          echo "\`${FROM}\` → \`${TO}\` (fast-forward)" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Prochaine étape : Actions → **Deploy** → target=\`${TO}\`" >> "$GITHUB_STEP_SUMMARY"
