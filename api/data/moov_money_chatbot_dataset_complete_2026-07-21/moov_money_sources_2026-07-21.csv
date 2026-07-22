@@ -1,0 +1,34 @@
+﻿source_id,source_url,record_count,record_types,categories,first_collected_at,status,notes
+SRC001,https://moovmoney.ga/,1,page,Institutionnel,2026-07-21,OK,OK
+SRC002,https://moovmoney.ga/carte-visa-uba-moov-money/,21,"faq, intent_seed, page, service, tariff","Banking, Carte Visa, Visa",2026-07-21,Review required,OK; Seed dérivé du site — non annoté; À valider avant mise en production
+SRC003,https://moovmoney.ga/client/,9,partner,Services intégrés,2026-07-21,OK,
+SRC004,https://moovmoney.ga/contact/,4,"faq, intent_seed, page",Support,2026-07-21,Review required,Coordonnées divergentes selon les zones du site; Seed dérivé du site — non annoté; À valider avant mise en production
+SRC005,https://moovmoney.ga/devenir-client/,12,"faq, intent_seed, page, procedure_step, service","Activation compte, Client, Compte, Sécurité",2026-07-21,Review required,OK; Seed dérivé du site — non annoté; À valider avant mise en production
+SRC006,https://moovmoney.ga/devenir-marchand/,6,"faq, intent_seed, page, service","Localisation, Marchand",2026-07-21,Review required,OK; Seed dérivé du site — non annoté; À valider avant mise en production
+SRC007,https://moovmoney.ga/devenir-revendeur/,7,"faq, intent_seed, page, service",Revendeur,2026-07-21,Review required,OK; Seed dérivé du site — non annoté; À valider avant mise en production
+SRC008,https://moovmoney.ga/grille-tarifaire-client/,108,"faq, intent_seed, page, tariff","BGFI GAB, Moov Money, Partenaire, Plafonds, Retrait, Réclamation, Tarifs, UBA Banking",2026-07-21,Review required,OK avec anomalies typographiques; Seed dérivé du site — non annoté; À valider avant mise en production
+SRC009,https://moovmoney.ga/marchand/,1,page,Marchand,2026-07-21,OK,OK
+SRC010,https://moovmoney.ga/marchand/moov-money-online-marchand/,10,"intent_seed, merchant, page, service","Marchand, Marchand Online — partenaires",2026-07-21,OK,Listé sur le site; OK; Seed dérivé du site — non annoté
+SRC011,https://moovmoney.ga/marchand/payxpress-marchand/,2,"page, service",Marchand,2026-07-21,OK,OK
+SRC012,https://moovmoney.ga/marchand/standards-et-partenaires/,8,"intent_seed, page, procedure_step, service","Marchand, Paiement, Paiement marchand standard",2026-07-21,OK,OK; Seed dérivé du site — non annoté
+SRC013,https://moovmoney.ga/moov-money-banking/,5,"faq, intent_seed, page, service","BGFI, Banking",2026-07-21,Review required,OK; Seed dérivé du site — non annoté; À valider avant mise en production
+SRC014,https://moovmoney.ga/moov-money-online-client/,36,"faq, intent_seed, merchant, page, service","Digital, E-commerce, Moov Money Online, Paiement",2026-07-21,Review required,En construction selon le site; Listé sur le site; OK; Seed dérivé du site — non annoté; À valider avant mise en production
+SRC015,https://moovmoney.ga/moov-money-uba/,12,"faq, intent_seed, page, service",Banking,2026-07-21,Review required,OK; Seed dérivé du site — non annoté; À valider avant mise en production
+SRC016,https://moovmoney.ga/payxpress-client/,37,"faq, intent_seed, merchant, page, service","Digital, Paiement, PayXpress",2026-07-21,Review required,Listé sur le site; OK; Seed dérivé du site — non annoté; À valider avant mise en production
+SRC017,https://moovmoney.ga/revendeur/,1,page,Revendeur,2026-07-21,OK,OK
+SRC018,https://moovmoney.ga/services-de-base/,1,page,Client,2026-07-21,OK,OK
+SRC019,https://moovmoney.ga/services/achat-de-forfait/,26,"bundle, faq, intent_seed, page, procedure_step, service","Achat de forfait, Client, Data, Forfaits, Télécom, Voix",2026-07-21,Review required,OK; Seed dérivé du site — non annoté; À valider avant mise en production
+SRC020,https://moovmoney.ga/services/approvisionnement-via-les-agences-bgfi/,8,"intent_seed, page, procedure_step, service","Approvisionnement revendeur BGFIBank, Revendeur",2026-07-21,OK,OK; Seed dérivé du site — non annoté
+SRC021,https://moovmoney.ga/services/campus-france/,12,"faq, intent_seed, page, procedure_step, service","Campus France, Paiement, Paiement Campus France, Éducation",2026-07-21,Review required,OK avec divergence tarifaire; Seed dérivé du site — non annoté; À valider avant mise en production
+SRC022,https://moovmoney.ga/services/canal-et-satcon/,20,"faq, intent_seed, page, procedure_step, service","Paiement, Réabonnement Canal+, Réabonnement SATCON, TV",2026-07-21,Review required,OK; Seed dérivé du site — non annoté; À valider avant mise en production
+SRC023,https://moovmoney.ga/services/depot/,4,"faq, intent_seed, page, service","Client, Dépôt",2026-07-21,Review required,OK; Seed dérivé du site — non annoté; À valider avant mise en production
+SRC024,https://moovmoney.ga/services/devenir-revendeur-plus/,3,"intent_seed, page, service",Revendeur,2026-07-21,OK,OK; Seed dérivé du site — non annoté
+SRC025,https://moovmoney.ga/services/facture-gabon-telecom/,10,"faq, intent_seed, page, procedure_step, service","Factures, Gabon Telecom, Paiement, Paiement Gabon Telecom",2026-07-21,Review required,OK; Seed dérivé du site — non annoté; À valider avant mise en production
+SRC026,https://moovmoney.ga/services/interoperabilite-gimacpay/,28,"intent_seed, page, partner, service","GIMACPAY, International, Interopérabilité",2026-07-21,OK,OK; Seed dérivé du site — non annoté
+SRC027,https://moovmoney.ga/services/moov-money-banking/,1,page,Banking,2026-07-21,OK,OK
+SRC028,https://moovmoney.ga/services/paiement-seeg-et-edan/,13,"faq, intent_seed, page, procedure_step, service","Factures, Paiement, Paiement SEEG/EDAN, SEEG",2026-07-21,Review required,OK; Seed dérivé du site — non annoté; À valider avant mise en production
+SRC029,https://moovmoney.ga/services/recharges/,10,"faq, intent_seed, page, procedure_step, service","Achat de crédit, Client, Crédit, Télécom",2026-07-21,Review required,OK; Seed dérivé du site — non annoté; À valider avant mise en production
+SRC030,https://moovmoney.ga/services/remittence-entrante/,17,"faq, intent_seed, page, partner, service","International, Interopérabilité, Rémittence",2026-07-21,Review required,OK; Seed dérivé du site — non annoté; À valider avant mise en production
+SRC031,https://moovmoney.ga/services/retrait/,8,"intent_seed, page, procedure_step, service","Client, Retrait, Retrait d’espèces",2026-07-21,OK,OK; Seed dérivé du site — non annoté
+SRC032,https://moovmoney.ga/services/transfert-international/,19,"faq, intent_seed, page, procedure_step, service","GIMACPAY, International, Interopérabilité, Transfert CEMAC",2026-07-21,Review required,OK; Seed dérivé du site — non annoté; À valider avant mise en production
+SRC033,https://moovmoney.ga/services/transfert-national/,15,"faq, intent_seed, page, procedure_step, service","Client, Transfert, Transfert national",2026-07-21,Review required,OK; Seed dérivé du site — non annoté; À valider avant mise en production

@@ -34,6 +34,9 @@ export default function WelcomeScreen() {
           <Link className="secondary welcome-cta" href="/auth?mode=register">
             Créer un compte
           </Link>
+          <a className="secondary welcome-cta welcome-install-link" href="#installer">
+            Installer l’app
+          </a>
         </div>
 
         <InstallPrompt />

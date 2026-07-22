@@ -1,9 +1,14 @@
 /** Client HTTP vers l’API FastAPI Moov Assist (séparée du frontend Next.js). */
 
-const DEFAULT = "http://127.0.0.1:8020";
+const DEFAULT_LOCAL = "http://127.0.0.1:8020";
+/** Fallback teste / preview tant que les env Vercel ne sont pas configurées. */
+export const DEFAULT_DEPLOYED_API = "https://api-production-c0fd.up.railway.app";
 
 export function moovApiBase(): string {
-  return (process.env.MOOV_API_URL || DEFAULT).replace(/\/$/, "");
+  const fromEnv = (process.env.MOOV_API_URL || "").trim();
+  if (fromEnv) return fromEnv.replace(/\/$/, "");
+  if (process.env.NODE_ENV === "production") return DEFAULT_DEPLOYED_API;
+  return DEFAULT_LOCAL;
 }
 
 export type MoovChatResult = {

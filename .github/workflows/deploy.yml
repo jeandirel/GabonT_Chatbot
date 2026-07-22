@@ -1,11 +1,11 @@
-# Déploiement manuel Vercel : teste → preprod → prod
-# Déclenchement : Actions → Deploy → Run workflow
+# Déploiement manuel fullstack : FastAPI (Railway) + Next.js (Vercel)
+# Ordre : teste → preprod → prod
 #
-# Secrets requis (Settings → Secrets and variables → Actions) :
+# Secrets Actions :
 #   VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID
-#
-# Promotion : preprod n’est autorisé qu’après un déploiement teste réussi ;
-#             prod n’est autorisé qu’après un déploiement preprod réussi.
+#   RAILWAY_TOKEN          (account/project token)
+#   RAILWAY_SERVICE_ID     (service API)
+#   (optionnel) RAILWAY_ENVIRONMENT — défaut production
 
 name: Deploy
 
@@ -37,6 +37,7 @@ permissions:
 
 env:
   NODE_VERSION: "22"
+  API_PUBLIC_URL: https://api-production-c0fd.up.railway.app
 
 jobs:
   validate:
@@ -57,6 +58,9 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+        env:
+          MOOV_API_URL: ${{ env.API_PUBLIC_URL }}
+          NEXT_PUBLIC_MOOV_API_URL: ${{ env.API_PUBLIC_URL }}
 
   gate:
     name: Promotion gate
@@ -71,54 +75,85 @@ jobs:
           REPO: ${{ github.repository }}
         run: |
           set -euo pipefail
-
           if [ "$SKIP_GATE" = "true" ]; then
             echo "::warning::Promotion gate skipped (skip_gate=true)"
             exit 0
           fi
-
           if [ "$TARGET" = "teste" ]; then
             echo "No upstream gate for teste"
             exit 0
           fi
-
           if [ "$TARGET" = "preprod" ]; then
             REQUIRED_ENV="teste"
           else
             REQUIRED_ENV="preprod"
           fi
-
-          echo "Checking successful deployment for environment=$REQUIRED_ENV ..."
-
           DEPLOY_ID=$(gh api "repos/${REPO}/deployments?environment=${REQUIRED_ENV}&per_page=10" \
             | jq -r --arg env "$REQUIRED_ENV" \
               '[.[] | select(.environment == $env)][0].id // empty')
-
           if [ -n "$DEPLOY_ID" ]; then
             STATE=$(gh api "repos/${REPO}/deployments/${DEPLOY_ID}/statuses" \
               | jq -r '.[0].state // empty')
-            echo "Latest ${REQUIRED_ENV} deployment #${DEPLOY_ID} state=${STATE}"
             if [ "$STATE" = "success" ]; then
               echo "Gate passed: ${REQUIRED_ENV} has a successful deployment"
               exit 0
             fi
           fi
-
           BRANCH_RUN=$(gh api "repos/${REPO}/actions/workflows/deploy.yml/runs?branch=${REQUIRED_ENV}&status=success&per_page=5" \
             | jq -r '.workflow_runs[0].id // empty')
-
           if [ -n "$BRANCH_RUN" ]; then
-            echo "Gate passed: successful Deploy workflow run #${BRANCH_RUN} on branch ${REQUIRED_ENV}"
+            echo "Gate passed: successful Deploy run #${BRANCH_RUN} on ${REQUIRED_ENV}"
             exit 0
           fi
-
-          echo "::error::Promotion blocked: deploy to '${REQUIRED_ENV}' successfully before '${TARGET}'."
-          echo "Run Deploy with target=${REQUIRED_ENV} first (or set skip_gate for emergency)."
+          echo "::error::Deploy '${REQUIRED_ENV}' successfully before '${TARGET}'."
           exit 1
 
-  deploy:
-    name: Deploy to ${{ github.event.inputs.target }}
+  deploy-api:
+    name: Deploy API (Railway)
     needs: [validate, gate]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout ${{ github.event.inputs.target }}
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.target }}
+
+      - name: Install Railway CLI
+        run: curl -fsSL https://railway.com/install.sh | sh
+
+      - name: Deploy api/
+        if: hashFiles('api/Dockerfile') != ''
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_SERVICE_ID: ${{ secrets.RAILWAY_SERVICE_ID }}
+        working-directory: api
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.railway/bin:$PATH"
+          if [ -z "${RAILWAY_TOKEN:-}" ] || [ -z "${RAILWAY_SERVICE_ID:-}" ]; then
+            echo "::warning::RAILWAY_TOKEN / RAILWAY_SERVICE_ID manquants — skip API deploy"
+            exit 0
+          fi
+          railway up --service "$RAILWAY_SERVICE_ID" -y --ci
+
+      - name: Smoke API health
+        run: |
+          set -euo pipefail
+          for i in 1 2 3 4 5 6; do
+            CODE=$(curl -sS -m 20 -o /tmp/h.json -w "%{http_code}" "${{ env.API_PUBLIC_URL }}/api/health" || echo 000)
+            echo "attempt $i → HTTP $CODE"
+            if [ "$CODE" = "200" ]; then
+              cat /tmp/h.json
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "::error::API health failed"
+          exit 1
+
+  deploy-web:
+    name: Deploy Web (Vercel)
+    needs: [deploy-api]
     runs-on: ubuntu-latest
     environment:
       name: ${{ github.event.inputs.target }}
@@ -145,12 +180,32 @@ jobs:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
           set -euo pipefail
-          if [ "$TARGET" = "prod" ]; then
-            ENV_NAME=production
-          else
-            ENV_NAME=preview
+          if [ -z "${VERCEL_TOKEN:-}" ]; then
+            echo "::error::VERCEL_TOKEN manquant"
+            exit 1
           fi
+          if [ "$TARGET" = "prod" ]; then ENV_NAME=production; else ENV_NAME=preview; fi
           vercel pull --yes --environment="$ENV_NAME" --token="$VERCEL_TOKEN"
+
+      - name: Inject Moov API URL into build env
+        env:
+          API_URL: ${{ env.API_PUBLIC_URL }}
+        run: |
+          set -euo pipefail
+          mkdir -p .vercel
+          # Ensure build-time public URL for CSP + Live WS
+          {
+            echo "MOOV_API_URL=${API_URL}"
+            echo "NEXT_PUBLIC_MOOV_API_URL=${API_URL}"
+          } >> .vercel/.env.preview.local 2>/dev/null || true
+          {
+            echo "MOOV_API_URL=${API_URL}"
+            echo "NEXT_PUBLIC_MOOV_API_URL=${API_URL}"
+          } >> .vercel/.env.production.local 2>/dev/null || true
+          export MOOV_API_URL="$API_URL"
+          export NEXT_PUBLIC_MOOV_API_URL="$API_URL"
+          echo "MOOV_API_URL=$API_URL" >> "$GITHUB_ENV"
+          echo "NEXT_PUBLIC_MOOV_API_URL=$API_URL" >> "$GITHUB_ENV"
 
       - name: Build
         env:
@@ -158,6 +213,8 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
           TARGET: ${{ github.event.inputs.target }}
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          MOOV_API_URL: ${{ env.API_PUBLIC_URL }}
+          NEXT_PUBLIC_MOOV_API_URL: ${{ env.API_PUBLIC_URL }}
         run: |
           set -euo pipefail
           if [ "$TARGET" = "prod" ]; then
@@ -182,4 +239,21 @@ jobs:
             vercel alias set "$URL" "gabon-t-chatbot-${TARGET}.vercel.app" --token="$VERCEL_TOKEN" || true
           fi
           echo "url=${URL}" >> "$GITHUB_OUTPUT"
-          echo "Deployed ${TARGET} → ${URL}"
+          echo "Deployed web ${TARGET} → ${URL}"
+
+      - name: Smoke fullstack
+        env:
+          WEB_URL: ${{ steps.deploy.outputs.url }}
+        run: |
+          set -euo pipefail
+          CODE=$(curl -sS -m 30 -o /tmp/st.json -w "%{http_code}" "${WEB_URL}/api/assistant/status" || echo 000)
+          echo "assistant/status HTTP $CODE"
+          cat /tmp/st.json || true
+          python3 - <<'PY'
+          import json,sys
+          d=json.load(open("/tmp/st.json"))
+          if not d.get("online"):
+            print("::error::Frontend ne voit pas l'API Railway")
+            sys.exit(1)
+          print("OK online", d.get("api_url"), d.get("voice_mode"))
+          PY

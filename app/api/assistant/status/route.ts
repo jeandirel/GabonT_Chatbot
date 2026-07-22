@@ -23,6 +23,7 @@ export async function GET() {
       online: true,
       voice_mode: data.voice_mode === "live" ? "live" : "turn",
       live_ws: data.live_ws || "/ws/live",
+      api_url: base,
       ws_url: `${wsOrigin}/ws/live`,
       live_model: data.live_model,
       llm_providers: data.llm_providers,

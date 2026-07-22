@@ -1,0 +1,115 @@
+﻿tariff_id,intent,operation,amount_min_fcfa,amount_max_fcfa,fee_type,fee_value,fee_unit,fee_description,source_url,collected_at,validation_status
+T001,depot_argent,Dépôt / achat de crédit,100,1000,Gratuit,0,FCFA,Frais: 0 FCFA (Gratuit).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T002,retrait_argent,Retrait d’espèces,100,1000,Pourcentage,3,%,Frais: 3 % (Pourcentage).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T003,devenir_marchand,Paiement marchand,100,1000,Forfait,10,FCFA,Frais: 10 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T004,moov_money,Transfert vers Moov Money,100,1000,Forfait,10,FCFA,Frais: 10 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T005,depot_argent,Dépôt / achat de crédit,1001,5000,Gratuit,0,FCFA,Frais: 0 FCFA (Gratuit).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T006,retrait_argent,Retrait d’espèces,1001,5000,Pourcentage,3,%,Frais: 3 % (Pourcentage).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T007,devenir_marchand,Paiement marchand,1001,5000,Forfait,50,FCFA,Frais: 50 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T008,moov_money,Transfert vers Moov Money,1001,5000,Forfait,50,FCFA,Frais: 50 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T009,depot_argent,Dépôt / achat de crédit,5001,10000,Gratuit,0,FCFA,Frais: 0 FCFA (Gratuit).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T010,retrait_argent,Retrait d’espèces,5001,10000,Pourcentage,3,%,Frais: 3 % (Pourcentage).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T011,devenir_marchand,Paiement marchand,5001,10000,Forfait,100,FCFA,Frais: 100 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T012,moov_money,Transfert vers Moov Money,5001,10000,Forfait,100,FCFA,Frais: 100 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T013,depot_argent,Dépôt / achat de crédit,10001,20000,Gratuit,0,FCFA,Frais: 0 FCFA (Gratuit).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T014,retrait_argent,Retrait d’espèces,10001,20000,Pourcentage,3,%,Frais: 3 % (Pourcentage).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T015,devenir_marchand,Paiement marchand,10001,20000,Forfait,150,FCFA,Frais: 150 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T016,moov_money,Transfert vers Moov Money,10001,20000,Forfait,150,FCFA,Frais: 150 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T017,depot_argent,Dépôt / achat de crédit,20001,30000,Gratuit,0,FCFA,Frais: 0 FCFA (Gratuit).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T018,retrait_argent,Retrait d’espèces,20001,30000,Pourcentage,3,%,Frais: 3 % (Pourcentage).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T019,devenir_marchand,Paiement marchand,20001,30000,Forfait,200,FCFA,Frais: 200 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T020,moov_money,Transfert vers Moov Money,20001,30000,Forfait,200,FCFA,Frais: 200 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T021,depot_argent,Dépôt / achat de crédit,30001,40000,Gratuit,0,FCFA,Frais: 0 FCFA (Gratuit).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T022,retrait_argent,Retrait d’espèces,30001,40000,Pourcentage,3,%,Frais: 3 % (Pourcentage).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T023,devenir_marchand,Paiement marchand,30001,40000,Forfait,250,FCFA,Frais: 250 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T024,moov_money,Transfert vers Moov Money,30001,40000,Forfait,250,FCFA,Frais: 250 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T025,depot_argent,Dépôt / achat de crédit,40001,50000,Gratuit,0,FCFA,Frais: 0 FCFA (Gratuit).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T026,retrait_argent,Retrait d’espèces,40001,50000,Pourcentage,3,%,Frais: 3 % (Pourcentage).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T027,devenir_marchand,Paiement marchand,40001,50000,Forfait,300,FCFA,Frais: 300 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T028,moov_money,Transfert vers Moov Money,40001,50000,Forfait,300,FCFA,Frais: 300 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T029,depot_argent,Dépôt / achat de crédit,50001,60000,Gratuit,0,FCFA,Frais: 0 FCFA (Gratuit).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T030,retrait_argent,Retrait d’espèces,50001,60000,Pourcentage,3,%,Frais: 3 % (Pourcentage).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T031,devenir_marchand,Paiement marchand,50001,60000,Forfait,350,FCFA,Frais: 350 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T032,moov_money,Transfert vers Moov Money,50001,60000,Forfait,350,FCFA,Frais: 350 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T033,depot_argent,Dépôt / achat de crédit,60001,70000,Gratuit,0,FCFA,Frais: 0 FCFA (Gratuit).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T034,retrait_argent,Retrait d’espèces,60001,70000,Pourcentage,3,%,Frais: 3 % (Pourcentage).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T035,devenir_marchand,Paiement marchand,60001,70000,Forfait,400,FCFA,Frais: 400 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T036,moov_money,Transfert vers Moov Money,60001,70000,Forfait,400,FCFA,Frais: 400 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T037,depot_argent,Dépôt / achat de crédit,70001,80000,Gratuit,0,FCFA,Frais: 0 FCFA (Gratuit).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T038,retrait_argent,Retrait d’espèces,70001,80000,Pourcentage,3,%,Frais: 3 % (Pourcentage).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T039,devenir_marchand,Paiement marchand,70001,80000,Forfait,450,FCFA,Frais: 450 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T040,moov_money,Transfert vers Moov Money,70001,80000,Forfait,450,FCFA,Frais: 450 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T041,depot_argent,Dépôt / achat de crédit,80001,90000,Gratuit,0,FCFA,Frais: 0 FCFA (Gratuit).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T042,retrait_argent,Retrait d’espèces,80001,90000,Pourcentage,3,%,Frais: 3 % (Pourcentage).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T043,devenir_marchand,Paiement marchand,80001,90000,Forfait,500,FCFA,Frais: 500 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T044,moov_money,Transfert vers Moov Money,80001,90000,Forfait,500,FCFA,Frais: 500 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T045,depot_argent,Dépôt / achat de crédit,90001,100000,Gratuit,0,FCFA,Frais: 0 FCFA (Gratuit).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T046,retrait_argent,Retrait d’espèces,90001,100000,Pourcentage,3,%,Frais: 3 % (Pourcentage).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T047,devenir_marchand,Paiement marchand,90001,100000,Forfait,550,FCFA,Frais: 550 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T048,moov_money,Transfert vers Moov Money,90001,100000,Forfait,550,FCFA,Frais: 550 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T049,depot_argent,Dépôt / achat de crédit,100001,150000,Gratuit,0,FCFA,Frais: 0 FCFA (Gratuit).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T050,retrait_argent,Retrait d’espèces,100001,150000,Pourcentage,3,%,Frais: 3 % (Pourcentage).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T051,devenir_marchand,Paiement marchand,100001,150000,Forfait,600,FCFA,Frais: 600 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T052,moov_money,Transfert vers Moov Money,100001,150000,Forfait,600,FCFA,Frais: 600 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T053,depot_argent,Dépôt / achat de crédit,150001,160000,Gratuit,0,FCFA,Frais: 0 FCFA (Gratuit).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T054,retrait_argent,Retrait d’espèces,150001,160000,Pourcentage,3,%,Frais: 3 % (Pourcentage).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T055,devenir_marchand,Paiement marchand,150001,160000,Forfait,650,FCFA,Frais: 650 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T056,moov_money,Transfert vers Moov Money,150001,160000,Forfait,650,FCFA,Frais: 650 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T057,depot_argent,Dépôt / achat de crédit,160001,250000,Gratuit,0,FCFA,Frais: 0 FCFA (Gratuit).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T058,retrait_argent,Retrait d’espèces,160001,250000,Forfait,5000,FCFA,Frais: 5000 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T059,devenir_marchand,Paiement marchand,160001,250000,Forfait,700,FCFA,Frais: 700 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T060,moov_money,Transfert vers Moov Money,160001,250000,Forfait,700,FCFA,Frais: 700 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T061,depot_argent,Dépôt / achat de crédit,250001,300000,Gratuit,0,FCFA,Frais: 0 FCFA (Gratuit).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T062,retrait_argent,Retrait d’espèces,250001,300000,Forfait,5000,FCFA,Frais: 5000 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T063,devenir_marchand,Paiement marchand,250001,300000,Forfait,750,FCFA,Frais: 750 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T064,moov_money,Transfert vers Moov Money,250001,300000,Forfait,750,FCFA,Frais: 750 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T065,depot_argent,Dépôt / achat de crédit,300001,350000,Gratuit,0,FCFA,Frais: 0 FCFA (Gratuit).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T066,retrait_argent,Retrait d’espèces,300001,350000,Forfait,5000,FCFA,Frais: 5000 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T067,devenir_marchand,Paiement marchand,300001,350000,Forfait,800,FCFA,Frais: 800 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T068,moov_money,Transfert vers Moov Money,300001,350000,Forfait,800,FCFA,Frais: 800 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T069,depot_argent,Dépôt / achat de crédit,350001,400000,Gratuit,0,FCFA,Frais: 0 FCFA (Gratuit).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T070,retrait_argent,Retrait d’espèces,350001,400000,Forfait,5000,FCFA,Frais: 5000 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T071,devenir_marchand,Paiement marchand,350001,400000,Forfait,850,FCFA,Frais: 850 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T072,moov_money,Transfert vers Moov Money,350001,400000,Forfait,850,FCFA,Frais: 850 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T073,depot_argent,Dépôt / achat de crédit,400001,450000,Gratuit,0,FCFA,Frais: 0 FCFA (Gratuit).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T074,retrait_argent,Retrait d’espèces,400001,450000,Forfait,5000,FCFA,Frais: 5000 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T075,devenir_marchand,Paiement marchand,400001,450000,Forfait,900,FCFA,Frais: 900 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T076,moov_money,Transfert vers Moov Money,400001,450000,Forfait,900,FCFA,Frais: 900 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T077,depot_argent,Dépôt / achat de crédit,450001,500000,Gratuit,0,FCFA,Frais: 0 FCFA (Gratuit).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T078,retrait_argent,Retrait d’espèces,450001,500000,Forfait,5000,FCFA,Frais: 5000 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T079,devenir_marchand,Paiement marchand,450001,500000,Forfait,1000,FCFA,Frais: 1000 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T080,moov_money,Transfert vers Moov Money,450001,500000,Forfait,1000,FCFA,Frais: 1000 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T081,moov_money,Consultation de solde,,,Gratuit,0,FCFA,Frais: 0 FCFA (Gratuit).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T082,moov_money,Changement de mot de passe,,,Gratuit,0,FCFA,Frais: 0 FCFA (Gratuit).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T083,moov_money,Changement de surnom,,,Forfait,10,FCFA,Frais: 10 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T084,moov_money,Rapport de transactions,,,Forfait,10,FCFA,Frais: 10 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T085,moov_money,Informations,,,Gratuit,0,FCFA,Frais: 0 FCFA (Gratuit).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T086,moov_money,Création de compte,,,Gratuit,0,FCFA,Frais: 0 FCFA (Gratuit).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T087,moov_money,Annulation P2P,,,Forfait,200,FCFA,Frais: 200 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T088,banking_uba,Moov Money vers banque,1000,160000,Pourcentage,3,%,Frais: 3 % (Pourcentage).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T089,banking_uba,Moov Money vers banque,160001,500000,Forfait,5000,FCFA,Frais: 5000 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T090,banking_uba,Banque vers Moov Money,1000,500000,Forfait,500,FCFA,Frais: 500 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T091,banking_uba,Consultation solde bancaire,,,Forfait,100,FCFA,Frais: 100 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T092,banking_uba,Consultation historique bancaire,,,Forfait,100,FCFA,Frais: 100 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T093,retrait_argent,Retrait sans carte,5000,165000,Pourcentage,3,%,Frais: 3 % (Pourcentage).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T094,retrait_argent,Retrait sans carte,165001,,Forfait,5000,FCFA,Frais: 5000 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T095,partenaire,Achat unités MobileDan,,,Forfait,100,FCFA,Frais: 100 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T096,partenaire,Paiement facture SEEG,,,Forfait,500,FCFA,Frais: 500 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T097,payer_canal,Réabonnement Canal+,,,Gratuit,0,FCFA,Frais: 0 FCFA (Gratuit).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T098,payer_satcon,Réabonnement SATCON,,,Gratuit,0,FCFA,Frais: 0 FCFA (Gratuit).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T099,partenaire,Inscription Université Omar Bongo,,,Gratuit,0,FCFA,Frais: 0 FCFA (Gratuit).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T100,payer_campus_france,Paiement Campus France,,,Forfait,350,FCFA,Frais: 350 FCFA (Forfait).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T101,partenaire,Recharge Total Card,,,Fourchette,10–1000,FCFA,Frais: 10–1000 FCFA (Fourchette).,https://moovmoney.ga/grille-tarifaire-client/,2026-07-21,Official public source
+T102,carte_visa,Carte Visa vers Moov Money,,,Forfait,1000,FCFA,Frais: 1000 FCFA (Forfait).,https://moovmoney.ga/carte-visa-uba-moov-money/,2026-07-21,Official public source
+T103,carte_visa,Moov Money vers Carte Visa,,,Pourcentage,1.5,%,Frais: 1.5 % (Pourcentage).,https://moovmoney.ga/carte-visa-uba-moov-money/,2026-07-21,Official public source
+T104,carte_visa,Consultation solde,,,Forfait,100,FCFA,Frais: 100 FCFA (Forfait).,https://moovmoney.ga/carte-visa-uba-moov-money/,2026-07-21,Official public source
+T105,carte_visa,Consultation 5 dernières transactions,,,Forfait,100,FCFA,Frais: 100 FCFA (Forfait).,https://moovmoney.ga/carte-visa-uba-moov-money/,2026-07-21,Official public source
+T106,carte_visa,Transfert carte à carte,,,Forfait,2380,FCFA,Frais: 2380 FCFA (Forfait).,https://moovmoney.ga/carte-visa-uba-moov-money/,2026-07-21,Official public source
+T107,carte_visa,Maintenance mensuelle,,,Forfait,2380,FCFA,Frais: 2380 FCFA (Forfait).,https://moovmoney.ga/carte-visa-uba-moov-money/,2026-07-21,Official public source
+T108,carte_visa,Achat sur TPE UBA,,,Forfait,1190,FCFA,Frais: 1190 FCFA (Forfait).,https://moovmoney.ga/carte-visa-uba-moov-money/,2026-07-21,Official public source
+T109,carte_visa,Achat internet international / TPE hors UBA,,,Pourcentage,4.5,%,Frais: 4.5 % (Pourcentage).,https://moovmoney.ga/carte-visa-uba-moov-money/,2026-07-21,Official public source
+T110,retrait_argent,Retrait GAB UBA,,,Gratuit,0,FCFA,Frais: 0 FCFA (Gratuit).,https://moovmoney.ga/carte-visa-uba-moov-money/,2026-07-21,Official public source
+T111,retrait_argent,Retrait autre banque locale GIMAC,,,Forfait,1000,FCFA,Frais: 1000 FCFA (Forfait).,https://moovmoney.ga/carte-visa-uba-moov-money/,2026-07-21,Official public source
+T112,retrait_argent,Retrait autre banque locale non-GIMAC,,,Forfait,2380,FCFA,Frais: 2380 FCFA (Forfait).,https://moovmoney.ga/carte-visa-uba-moov-money/,2026-07-21,Official public source
+T113,retrait_argent,Retrait GAB zone euro,,,Pourcentage,5,%,Frais: 5 % (Pourcentage).,https://moovmoney.ga/carte-visa-uba-moov-money/,2026-07-21,Official public source
+T114,retrait_argent,Retrait autre devise,,,Pourcentage,8,%,Frais: 8 % (Pourcentage).,https://moovmoney.ga/carte-visa-uba-moov-money/,2026-07-21,Official public source

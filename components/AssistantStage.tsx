@@ -63,6 +63,7 @@ export default function AssistantStage({ notify }: Props) {
   const liveUserPartial = useRef("");
   const liveAssistantPartial = useRef("");
   const textModeRef = useRef(false);
+  const apiBaseRef = useRef<string | undefined>(undefined);
 
   useEffect(() => {
     textModeRef.current = textMode;
@@ -111,7 +112,7 @@ export default function AssistantStage({ notify }: Props) {
 
   const startLive = useCallback(async () => {
     if (liveRef.current?.isActive || textModeRef.current) return;
-    const session = new LiveVoiceSession();
+    const session = new LiveVoiceSession(apiBaseRef.current);
     liveRef.current = session;
     setLiveActive(true);
     setListening(true);
@@ -212,8 +213,10 @@ export default function AssistantStage({ notify }: Props) {
         const data = (await res.json()) as {
           online?: boolean;
           voice_mode?: string;
+          api_url?: string;
         };
         if (cancelled) return;
+        if (data.api_url) apiBaseRef.current = data.api_url.replace(/\/$/, "");
         setBackendOnline(Boolean(data.online));
         const mode: VoiceMode = data.voice_mode === "live" ? "live" : "turn";
         setVoiceMode(mode);

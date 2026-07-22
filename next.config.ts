@@ -7,9 +7,14 @@ const scriptSrc = isDev
   ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
   : "script-src 'self' 'unsafe-inline'";
 
+const moovHttp = (
+  process.env.NEXT_PUBLIC_MOOV_API_URL ||
+  "https://api-production-c0fd.up.railway.app"
+).replace(/\/$/, "");
+const moovWs = moovHttp.replace(/^http/, "ws");
 const connectSrc = isDev
   ? "connect-src 'self' http://127.0.0.1:* http://localhost:* ws://127.0.0.1:* ws://localhost:*"
-  : "connect-src 'self'";
+  : `connect-src 'self' ${moovHttp} ${moovWs}`;
 
 const csp = [
   "default-src 'self'",
@@ -19,7 +24,7 @@ const csp = [
   "font-src 'self' https://fonts.gstatic.com data:",
   scriptSrc,
   "worker-src 'self' blob:",
-  "media-src 'self' blob:",
+  "media-src 'self' blob: data:",
   "frame-ancestors 'self'",
 ].join("; ");
 

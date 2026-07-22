@@ -17,6 +17,7 @@ import ComingSoonBarrier from "./ComingSoonBarrier";
 import AssistantStage from "./AssistantStage";
 import PwaRegister from "./PwaRegister";
 import MoovLogo from "./MoovLogo";
+import InstallPrompt from "./InstallPrompt";
 
 const LIVE_SCREENS = new Set(["auth", "assistant", "dashboard"]);
 const PUBLIC_SCREENS = new Set(["auth"]);
@@ -266,6 +267,9 @@ export default function MoovApp({ initialScreen }: { initialScreen: string }) {
             </Link>
           ))}
         </nav>
+        <div className="sidebar-install">
+          <InstallPrompt compact />
+        </div>
         <button type="button" className="logout-btn" disabled={loggingOut} onClick={() => void logout()}>
           <LogOut size={18} />
           {loggingOut ? "Déconnexion…" : "Déconnexion"}

@@ -33,3 +33,10 @@ En urgence uniquement : Deploy avec `skip_gate = true`.
 
 - Prod : déploiement Vercel `--prod` (domaine projet, ex. [gabon-t-chatbot.vercel.app](https://gabon-t-chatbot.vercel.app))
 - Teste / preprod : alias preview `gabon-t-chatbot-teste.vercel.app` / `gabon-t-chatbot-preprod.vercel.app` (si le token le permet)
+
+## Fullstack (API Railway)
+
+Voir [DEPLOY_FULLSTACK.md](./DEPLOY_FULLSTACK.md).
+
+- API teste : `https://api-production-c0fd.up.railway.app`
+- Secrets Actions additionnels : `RAILWAY_TOKEN`, `RAILWAY_SERVICE_ID` (`2a19867c-defa-4beb-ac2e-cc85b38f53d4`)

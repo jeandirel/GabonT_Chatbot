@@ -13,11 +13,14 @@ export type LiveVoiceHandlers = {
   onDebug?: (message: string) => void;
 };
 
-function moovWsOrigin(): string {
+const DEFAULT_DEPLOYED_API = "https://api-production-c0fd.up.railway.app";
+
+function moovWsOrigin(apiBase?: string): string {
   const http = (
+    apiBase ||
     process.env.NEXT_PUBLIC_MOOV_API_URL ||
     process.env.NEXT_PUBLIC_MOOV_WS_ORIGIN ||
-    "http://127.0.0.1:8020"
+    (process.env.NODE_ENV === "production" ? DEFAULT_DEPLOYED_API : "http://127.0.0.1:8020")
   ).replace(/\/$/, "");
   if (http.startsWith("ws")) return http;
   return http.replace(/^http/, "ws");
@@ -142,6 +145,11 @@ export class LiveVoiceSession {
   private assistantSpeaking = false;
   private chunksSent = 0;
   private generation = 0;
+  private readonly apiBase?: string;
+
+  constructor(apiBase?: string) {
+    this.apiBase = apiBase?.replace(/\/$/, "") || undefined;
+  }
 
   get isActive() {
     return this.active;
@@ -158,7 +166,7 @@ export class LiveVoiceSession {
     this.assistantSpeaking = false;
     this.chunksSent = 0;
 
-    const url = `${moovWsOrigin()}/ws/live?language=${language}`;
+    const url = `${moovWsOrigin(this.apiBase)}/ws/live?language=${language}`;
     handlers.onDebug?.(`WS → ${url}`);
     const ws = new WebSocket(url);
     this.ws = ws;
