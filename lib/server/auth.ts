@@ -1,6 +1,7 @@
 import type { NextRequest } from "next/server";
 import { db, hasDatabase } from "./db";
 import { sessionCookie, verifySessionToken } from "./session";
+import { PROVISIONAL_USERS } from "../provisional-users";
 
 export class AuthenticationError extends Error {}
 
@@ -13,9 +14,13 @@ export async function authenticatedUser(request: NextRequest, developmentPhone?:
   if (token) {
     try {
       const userId = await verifySessionToken(token);
-      if (userId && hasDatabase()) {
-        const user = await db().user.findUnique({ where: { id: userId }, select: { id: true, phone: true } });
-        if (user) return user;
+      if (userId) {
+        const provisional = Object.values(PROVISIONAL_USERS).find((u) => u.id === userId);
+        if (provisional) return { id: provisional.id, phone: provisional.phone };
+        if (hasDatabase()) {
+          const user = await db().user.findUnique({ where: { id: userId }, select: { id: true, phone: true } });
+          if (user) return user;
+        }
       }
     } catch {
       // A malformed or expired cookie is handled as an unauthenticated request.

@@ -10,7 +10,7 @@ function secret() {
 }
 
 export async function createSessionToken(userId: string) {
-  return new SignJWT({ sub: userId, scope: "customer" }).setProtectedHeader({ alg: "HS256" }).setIssuedAt().setExpirationTime("15m").setIssuer("moov-assist").setAudience("moov-money").sign(secret());
+  return new SignJWT({ sub: userId, scope: "customer" }).setProtectedHeader({ alg: "HS256" }).setIssuedAt().setExpirationTime("24h").setIssuer("moov-assist").setAudience("moov-money").sign(secret());
 }
 
 export async function verifySessionToken(token: string) {
@@ -49,5 +49,5 @@ export async function verifyConfirmationToken(token: string) {
   return { userId: result.payload.sub, context: result.payload.context as Record<string, unknown> | undefined };
 }
 
-export const sessionCookie = { name: "moov_session", options: { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "strict" as const, path: "/", maxAge: 900 } };
+export const sessionCookie = { name: "moov_session", options: { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax" as const, path: "/", maxAge: 86400 } };
 export const refreshCookie = { name: "moov_refresh", options: { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "strict" as const, path: "/api/auth", maxAge: 30 * 24 * 60 * 60 } };
