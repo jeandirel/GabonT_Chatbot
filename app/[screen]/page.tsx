@@ -8,5 +8,5 @@ export function generateStaticParams() {
 
 export default async function ScreenPage({ params }: { params: Promise<{ screen: string }> }) {
   const { screen } = await params;
-  return <MoovApp initialScreen={screens.includes(screen) ? screen : "dashboard"} />;
+  return <MoovApp initialScreen={screens.includes(screen) ? screen : "assistant"} />;
 }

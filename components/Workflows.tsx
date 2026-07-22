@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { startAuthentication, startRegistration } from "@simplewebauthn/browser";
 import { AlertTriangle, ArrowLeft, Bell, Bot, Check, ChevronRight, CircleHelp, Clock3, CreditCard, FileText, Headphones, KeyRound, LockKeyhole, MessageSquareText, Phone, ScanLine, Send, ShieldCheck, Smartphone, Upload, UserCheck, Users } from "lucide-react";
+import MoovLogo from "./MoovLogo";
 
 type Notify = (message: string) => void;
 
@@ -10,24 +12,44 @@ const Field = ({ label, children, hint }: { label: string; children: React.React
 const Steps = ({ current, labels }: { current: number; labels: string[] }) => <div className="stepper">{labels.map((label, index) => <div className={index <= current ? "done" : ""} key={label}><i>{index < current ? <Check size={14}/> : index + 1}</i><span>{label}</span></div>)}</div>;
 
 export function AuthWorkflow({ notify }: { notify: Notify }) {
+  const searchParams = useSearchParams();
   const [mode, setMode] = useState<"login"|"register">("login");
   const [step, setStep] = useState(0);
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
   const [biometrics, setBiometrics] = useState(true);
-  const validPhone = /^0[1-7]\d{7}$/.test(phone.replace(/\s/g, ""));
+  const validPhone = /^0[1-7]\d{6,7}$/.test(phone.replace(/\s/g, ""));
+
+  useEffect(() => {
+    const m = searchParams.get("mode");
+    if (m === "register" || m === "login") {
+      setMode(m);
+      setStep(0);
+    }
+  }, [searchParams]);
+
   const next = async () => {
     if (step === 0 && !validPhone) return notify("Saisissez un numéro gabonais valide à 9 chiffres.");
     setLoading(true);
     if (step === 0) {
       const response = await fetch("/api/auth/otp", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ phone }) });
-      if (!response.ok) { setLoading(false); return notify("Impossible d’envoyer le code de vérification."); }
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) { setLoading(false); return notify(payload.error || "Impossible d’envoyer le code de vérification."); }
+      if (payload.hint) notify(payload.hint);
     }
     if (step === 1) {
       const response = await fetch("/api/auth/otp", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ phone, code: otp }) });
       const payload = await response.json();
-      if (!payload.verified) { setLoading(false); return notify("Code incorrect. Utilisez 123456 pour la démonstration."); }
+      if (!payload.verified) { setLoading(false); return notify(payload.error || "Code incorrect. Utilisez 123456 pour la démonstration."); }
+      // POC provisoire : session créée, on saute la passkey et on ouvre l’assistant
+      if (payload.provisional || payload.verified) {
+        setLoading(false);
+        notify(`Bienvenue ${payload.user?.displayName || ""}`.trim());
+        const nextPath = searchParams.get("next");
+        window.location.href = nextPath && nextPath.startsWith("/") ? nextPath : "/assistant";
+        return;
+      }
     }
     if (step === 2) {
       try {
@@ -52,8 +74,8 @@ export function AuthWorkflow({ notify }: { notify: Notify }) {
     }
     setLoading(false); setStep((value) => value + 1);
   };
-  return <div className="workflow narrow"><div className="tabs"><button className={mode === "login" ? "active" : ""} onClick={() => {setMode("login");setStep(0)}}>Connexion</button><button className={mode === "register" ? "active" : ""} onClick={() => {setMode("register");setStep(0)}}>Créer un compte</button></div><Steps current={step} labels={["Téléphone", "Vérification", "Sécurité"]}/><section className="glass form-card">
-    {step === 0 && <><span className="form-icon"><Phone/></span><h2>{mode === "login" ? "Ravi de vous revoir" : "Rejoignez Moov Money"}</h2><p>Votre numéro sert d’identifiant sécurisé.</p><Field label="Numéro de téléphone"><div className="phone-input"><b>+241</b><input inputMode="numeric" value={phone} onChange={e => setPhone(e.target.value.replace(/[^0-9 ]/g,""))} placeholder="06 12 34 56"/></div></Field></>}
+  return <div className="workflow narrow"><div className="auth-logo-wrap"><MoovLogo height={64} plate /></div><div className="tabs"><button className={mode === "login" ? "active" : ""} onClick={() => {setMode("login");setStep(0)}}>Connexion</button><button className={mode === "register" ? "active" : ""} onClick={() => {setMode("register");setStep(0)}}>Créer un compte</button></div><Steps current={step} labels={["Téléphone", "Vérification", "Sécurité"]}/><section className="glass form-card">
+    {step === 0 && <><span className="form-icon"><Phone/></span><h2>{mode === "login" ? "Ravi de vous revoir" : "Rejoignez Moov Assist"}</h2><p>Comptes provisoires POC Gabon Telecom — Moov Africa.</p><Field label="Numéro de téléphone" hint="06123456 Jean Direl · 06123457 Christian BEYEME · 06123458 Xavier Ondo"><div className="phone-input"><b>+241</b><input inputMode="numeric" value={phone} onChange={e => setPhone(e.target.value.replace(/[^0-9 ]/g,""))} placeholder="06 12 34 56"/></div></Field></>}
     {step === 1 && <><span className="form-icon"><Smartphone/></span><h2>Confirmez votre numéro</h2><p>Un code à six chiffres a été envoyé au +241 {phone}.</p><Field label="Code de vérification" hint="Code de démonstration : 123456"><input className="otp" inputMode="numeric" maxLength={6} value={otp} onChange={e => setOtp(e.target.value.replace(/\D/g,""))} placeholder="••••••"/></Field></>}
     {step === 2 && <><span className="form-icon"><KeyRound/></span><h2>{mode === "login" ? "Confirmez avec votre passkey" : "Sécurisez cet appareil"}</h2><p>L’empreinte ou Face ID reste dans votre téléphone. Moov Assist reçoit uniquement une preuve cryptographique.</p>{mode === "register" && <Field label="Code PIN Moov Money"><input className="otp" type="password" inputMode="numeric" maxLength={4} autoComplete="off" placeholder="••••"/><small>Ce champ ne sera ni enregistré ni envoyé à Chatbase.</small></Field>}<label className="check"><input type="checkbox" checked={biometrics} onChange={e => setBiometrics(e.target.checked)}/> Utiliser la biométrie sécurisée de cet appareil</label></>}
     <div className="form-actions">{step > 0 && <button className="secondary" onClick={() => setStep(step - 1)}><ArrowLeft size={17}/> Retour</button>}<button className="primary" disabled={loading} onClick={next}>{loading ? "Vérification…" : step === 2 ? "Terminer" : "Continuer"}<ChevronRight size={17}/></button></div>

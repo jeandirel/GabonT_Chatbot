@@ -1,5 +1,12 @@
-import { redirect } from "next/navigation";
+import WelcomeScreen from "../components/WelcomeScreen";
+import PwaRegister from "../components/PwaRegister";
 
+/** Entrée produit : présentation + PWA, puis auth. */
 export default function Home() {
-  redirect("/dashboard");
+  return (
+    <>
+      <PwaRegister />
+      <WelcomeScreen />
+    </>
+  );
 }
