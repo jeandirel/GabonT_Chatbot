@@ -38,6 +38,8 @@ origins = [
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins or ["*"],
+    # Previews Vercel (teste / PR) + domaines personnalisés éventuels
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
