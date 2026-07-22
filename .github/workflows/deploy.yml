@@ -1,0 +1,185 @@
+# Déploiement manuel Vercel : teste → preprod → prod
+# Déclenchement : Actions → Deploy → Run workflow
+#
+# Secrets requis (Settings → Secrets and variables → Actions) :
+#   VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID
+#
+# Promotion : preprod n’est autorisé qu’après un déploiement teste réussi ;
+#             prod n’est autorisé qu’après un déploiement preprod réussi.
+
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Environnement cible
+        required: true
+        type: choice
+        options:
+          - teste
+          - preprod
+          - prod
+      skip_gate:
+        description: Ignorer le contrôle de promotion (urgence uniquement)
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: deploy-${{ github.event.inputs.target }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  actions: read
+  deployments: write
+
+env:
+  NODE_VERSION: "22"
+
+jobs:
+  validate:
+    name: Validate (${{ github.event.inputs.target }})
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch for target
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.target }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+
+  gate:
+    name: Promotion gate
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enforce teste → preprod → prod
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TARGET: ${{ github.event.inputs.target }}
+          SKIP_GATE: ${{ github.event.inputs.skip_gate }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          if [ "$SKIP_GATE" = "true" ]; then
+            echo "::warning::Promotion gate skipped (skip_gate=true)"
+            exit 0
+          fi
+
+          if [ "$TARGET" = "teste" ]; then
+            echo "No upstream gate for teste"
+            exit 0
+          fi
+
+          if [ "$TARGET" = "preprod" ]; then
+            REQUIRED_ENV="teste"
+          else
+            REQUIRED_ENV="preprod"
+          fi
+
+          echo "Checking successful deployment for environment=$REQUIRED_ENV ..."
+
+          DEPLOY_ID=$(gh api "repos/${REPO}/deployments?environment=${REQUIRED_ENV}&per_page=10" \
+            | jq -r --arg env "$REQUIRED_ENV" \
+              '[.[] | select(.environment == $env)][0].id // empty')
+
+          if [ -n "$DEPLOY_ID" ]; then
+            STATE=$(gh api "repos/${REPO}/deployments/${DEPLOY_ID}/statuses" \
+              | jq -r '.[0].state // empty')
+            echo "Latest ${REQUIRED_ENV} deployment #${DEPLOY_ID} state=${STATE}"
+            if [ "$STATE" = "success" ]; then
+              echo "Gate passed: ${REQUIRED_ENV} has a successful deployment"
+              exit 0
+            fi
+          fi
+
+          BRANCH_RUN=$(gh api "repos/${REPO}/actions/workflows/deploy.yml/runs?branch=${REQUIRED_ENV}&status=success&per_page=5" \
+            | jq -r '.workflow_runs[0].id // empty')
+
+          if [ -n "$BRANCH_RUN" ]; then
+            echo "Gate passed: successful Deploy workflow run #${BRANCH_RUN} on branch ${REQUIRED_ENV}"
+            exit 0
+          fi
+
+          echo "::error::Promotion blocked: deploy to '${REQUIRED_ENV}' successfully before '${TARGET}'."
+          echo "Run Deploy with target=${REQUIRED_ENV} first (or set skip_gate for emergency)."
+          exit 1
+
+  deploy:
+    name: Deploy to ${{ github.event.inputs.target }}
+    needs: [validate, gate]
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event.inputs.target }}
+      url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - name: Checkout ${{ github.event.inputs.target }}
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.target }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel@41
+
+      - name: Pull Vercel env
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          TARGET: ${{ github.event.inputs.target }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ "$TARGET" = "prod" ]; then
+            ENV_NAME=production
+          else
+            ENV_NAME=preview
+          fi
+          vercel pull --yes --environment="$ENV_NAME" --token="$VERCEL_TOKEN"
+
+      - name: Build
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          TARGET: ${{ github.event.inputs.target }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ "$TARGET" = "prod" ]; then
+            vercel build --prod --token="$VERCEL_TOKEN"
+          else
+            vercel build --token="$VERCEL_TOKEN"
+          fi
+
+      - name: Deploy
+        id: deploy
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          TARGET: ${{ github.event.inputs.target }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ "$TARGET" = "prod" ]; then
+            URL=$(vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN")
+          else
+            URL=$(vercel deploy --prebuilt --token="$VERCEL_TOKEN")
+            vercel alias set "$URL" "gabon-t-chatbot-${TARGET}.vercel.app" --token="$VERCEL_TOKEN" || true
+          fi
+          echo "url=${URL}" >> "$GITHUB_OUTPUT"
+          echo "Deployed ${TARGET} → ${URL}"
